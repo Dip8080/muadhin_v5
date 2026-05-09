@@ -1,0 +1,819 @@
+import 'dart:async';
+import 'dart:math';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class WallpaperController extends GetxController {
+  final String folderPath;
+
+  WallpaperController({this.folderPath = "images/"});
+
+  final RxString currentImageUrl = ''.obs;
+  final RxList<String> allImageUrls = <String>[].obs;
+
+  static const _prefsKeyUrl = 'daily_wallpaper_url';
+  static const _prefsKeyTs = 'daily_wallpaper_ts';
+
+  final RxInt currentHadithIndex = 0.obs;
+  final RxString selectedLang = 'nl'.obs;
+
+  final Map<String, List<String>> hadithByLanguage = {
+    'en': [
+      "The strong person is not the good wrestler. The strong person is the one who controls himself when he is angry. (Bukhari, Muslim)",
+      "None of you [truly] believes until he loves for his brother what he loves for himself. (Bukhari, Muslim)",
+      "The best among you are those who have the best manners and character. (Bukhari)",
+      "Seek knowledge from the cradle to the grave.(Ibn Maja, 224)",
+      "The best of wealth is the wealth of the soul. (Bukhari, Muslim)",
+      "When a man dies, his deeds come to an end except for three things: Sadaqah Jariyah (ongoing charity), beneficial knowledge, or a righteous child who prays for him. (Muslim)",
+      "The most beloved actions to Allah are those performed consistently, even if they are small. (Bukhari, Muslim)",
+      "Allah does not look at your appearance or your wealth but looks at your heart and actions. (Muslim)",
+      "The best of you are those who feed others and greet those they know and those they do not know. (Bukhari, Muslim)",
+      "He who is not merciful to people will not be treated mercifully by Allah. (Bukhari, Muslim)",
+      "A good word is charity. (Bukhari, Muslim)",
+      "The most beloved of places to Allah are the mosques. (Muslim)",
+      "The world is a prison for the believer and a paradise for the unbeliever. (Muslim)",
+      "The best of you are those who learn the Qur’an and teach it. (Bukhari)",
+      "The believer does not slander, curse, or speak in an obscene or foul manner. (Tirmidhi)",
+      "There is no disease that Allah has created, except that He also has created its treatment. (Bukhari)",
+      "A person who walks on a path seeking knowledge, Allah will make the path to Paradise easy for him. (Muslim)",
+      "Do not waste water even if you perform ablution on the banks of an abundantly-flowing river. (Ibn Majah)",
+      "The most complete of the believers in faith are those with the best character. (Tirmidhi)",
+      "None of you will enter Paradise by his deeds alone unless Allah bestows His Mercy upon you. (Muslim)",
+      "He who builds a mosque for Allah, Allah will build a house for him in Paradise. (Bukhari, Muslim)",
+      "Whoever removes a hardship of a believer in this world, Allah will remove a hardship from him on the Day of Resurrection. (Muslim)",
+      "Smiling in the face of your brother is an act of charity. (Tirmidhi)",
+      "He who does not show mercy to our children nor acknowledge the rights of our elders is not one of us. (Tirmidhi)",
+      "The best supplication is the supplication on the Day of Arafah. (Tirmidhi)",
+      "Be merciful to those on the earth, and the One above the heavens will have mercy upon you. (Tirmidhi)",
+      "The reward of deeds depends upon the intentions. (Bukhari, Muslim)",
+      "The best of people are those that bring most benefit to others. (Daraqutni)",
+      "Verily, Allah is kind and loves kindness in all matters. (Bukhari, Muslim)",
+      "He who believes in Allah and the Last Day should either speak good or remain silent. (Bukhari, Muslim)",
+      "The closest to me on the Day of Judgment are those who have the best manners. (Tirmidhi)",
+      "The best charity is that given in Ramadan. (Tirmidhi)",
+      "Cleanliness is half of faith. (Muslim)",
+      "Paradise lies under the feet of your mother. (Nasai)",
+      "A Muslim is the one who avoids harming Muslims with his tongue and hands. (Bukhari, Muslim)",
+      "The greatest jihad is to battle your own soul, to fight the evil within yourself. (Tirmidhi)",
+      "Whoever believes in Allah and the Last Day, let him maintain the bonds of kinship. (Bukhari)",
+      "Feed the hungry, visit the sick, and free the captives. (Bukhari)",
+      "Patience is light. (Muslim)",
+      "A believer is like a brick for another believer, the one supporting the other. (Bukhari, Muslim)",
+      "Whoever says, 'SubhanAllah wa bihamdihi' 100 times a day, will have all his sins forgiven even if they were as much as the foam of the sea. (Bukhari, Muslim)",
+      "Allah will not show mercy to him who is not merciful to people. (Bukhari, Muslim)",
+      "The best day on which the sun has risen is Friday; on it Adam was created. (Muslim)",
+      "A father gives his child nothing better than a good education. (Tirmidhi)",
+      "Do not envy one another, do not inflate prices, and do not turn away from one another. Be servants of Allah as brothers. (Muslim)",
+      "The one who eats and is grateful is like the one who fasts and is patient. (Tirmidhi)",
+      "Modesty is part of faith. (Bukhari, Muslim)",
+      "Whoever conceals the faults of a Muslim, Allah will conceal his faults on the Day of Judgment. (Muslim)",
+      "The strong person is not the good wrestler. The strong person is the one who controls himself when he is angry. (Bukhari, Muslim)",
+      "None of you [truly] believes until he loves for his brother what he loves for himself. (Bukhari, Muslim)",
+      "The best among you are those who have the best manners and character. (Bukhari)",
+      "Seek knowledge from the cradle to the grave.",
+      "The best of wealth is the wealth of the soul. (Bukhari, Muslim)",
+      "When a man dies, his deeds come to an end except for three things: Sadaqah Jariyah (ongoing charity), beneficial knowledge, or a righteous child who prays for him. (Muslim)",
+      "The most beloved actions to Allah are those performed consistently, even if they are small. (Bukhari, Muslim)",
+      "Allah does not look at your appearance or your wealth but looks at your heart and actions. (Muslim)",
+      "The best of you are those who feed others and greet those they know and those they do not know. (Bukhari, Muslim)",
+      "He who is not merciful to people will not be treated mercifully by Allah. (Bukhari, Muslim)",
+      "A good word is charity. (Bukhari, Muslim)",
+      "The most beloved of places to Allah are the mosques. (Muslim)",
+      "The world is a prison for the believer and a paradise for the unbeliever. (Muslim)",
+      "The best of you are those who learn the Qur’an and teach it. (Bukhari)",
+      "The believer does not slander, curse, or speak in an obscene or foul manner. (Tirmidhi)",
+      "There is no disease that Allah has created, except that He also has created its treatment. (Bukhari)",
+      "A person who walks on a path seeking knowledge, Allah will make the path to Paradise easy for him. (Muslim)",
+      "Do not waste water even if you perform ablution on the banks of an abundantly-flowing river. (Ibn Majah)",
+      "The most complete of the believers in faith are those with the best character. (Tirmidhi)",
+      "None of you will enter Paradise by his deeds alone unless Allah bestows His Mercy upon you. (Muslim)",
+      "He who builds a mosque for Allah, Allah will build a house for him in Paradise. (Bukhari, Muslim)",
+      "Whoever removes a hardship of a believer in this world, Allah will remove a hardship from him on the Day of Resurrection. (Muslim)",
+      "Smiling in the face of your brother is an act of charity. (Tirmidhi)",
+      "He who does not show mercy to our children nor acknowledge the rights of our elders is not one of us. (Tirmidhi)",
+      "The best supplication is the supplication on the Day of Arafah. (Tirmidhi)",
+      "Be merciful to those on the earth, and the One above the heavens will have mercy upon you. (Tirmidhi)",
+      "The reward of deeds depends upon the intentions. (Bukhari, Muslim)",
+      "The best of people are those that bring most benefit to others. (Daraqutni)",
+      "Verily, Allah is kind and loves kindness in all matters. (Bukhari, Muslim)",
+      "He who believes in Allah and the Last Day should either speak good or remain silent. (Bukhari, Muslim)",
+      "The closest to me on the Day of Judgment are those who have the best manners. (Tirmidhi)",
+      "The best charity is that given in Ramadan. (Tirmidhi)",
+      "Cleanliness is half of faith. (Muslim)",
+      "Paradise lies under the feet of your mother. (Nasai)",
+      "A Muslim is the one who avoids harming Muslims with his tongue and hands. (Bukhari, Muslim)",
+      "The greatest jihad is to battle your own soul, to fight the evil within yourself. (Tirmidhi)",
+      "Whoever believes in Allah and the Last Day, let him maintain the bonds of kinship. (Bukhari)",
+      "Feed the hungry, visit the sick, and free the captives. (Bukhari)",
+      "Patience is light. (Muslim)",
+      "A believer is like a brick for another believer, the one supporting the other. (Bukhari, Muslim)",
+      "Whoever says, 'SubhanAllah wa bihamdihi' 100 times a day, will have all his sins forgiven even if they were as much as the foam of the sea. (Bukhari, Muslim)",
+      "Allah will not show mercy to him who is not merciful to people. (Bukhari, Muslim)",
+      "The best day on which the sun has risen is Friday; on it Adam was created. (Muslim)",
+      "A father gives his child nothing better than a good education. (Tirmidhi)",
+      "Do not envy one another, do not inflate prices, and do not turn away from one another. Be servants of Allah as brothers. (Muslim)",
+      "The one who eats and is grateful is like the one who fasts and is patient. (Tirmidhi)",
+      "Modesty is part of faith. (Bukhari, Muslim)",
+      "Whoever conceals the faults of a Muslim, Allah will conceal his faults on the Day of Judgment. (Muslim)",
+      "Do not harm yourself or others. (Ibn Majah)",
+      "The best wealth is a contented heart. (Bukhari)",
+      "The most beloved of deeds to Allah are those that are done regularly, even if they are small. (Bukhari, Muslim)",
+      "The best house among Muslims is the house where orphans are well treated. (Ibn Majah)",
+      "He who does not thank people does not thank Allah. (Tirmidhi)",
+      "Make things easy for people and do not make them difficult. (Bukhari, Muslim)",
+      "Allah is Beautiful and He loves beauty. (Muslim)",
+      "The best prayer after the obligatory prayers is prayer during the night. (Muslim)",
+      "Whoever seeks forgiveness for a believer, Allah will forgive them. (Muslim)",
+      "A truthful merchant is held in high regard in the Hereafter. (Tirmidhi)",
+      "The best of Islam is to feed the hungry and to greet with peace those you know and those you do not know. (Bukhari, Muslim)",
+      "Guard your tongue, and do not allow it to utter falsehoods. (Tirmidhi)",
+      "Charity does not decrease wealth. (Muslim)",
+      "Richness does not lie in abundance of worldly goods but richness is the richness of the soul. (Bukhari, Muslim)",
+      "Visit the sick, feed the hungry, and release the captives. (Bukhari)"
+    ],
+    'nl': [
+      "De sterke persoon is niet de goede worstelaar. De sterke persoon is degene die zichzelf beheerst als hij boos is. (Bukhari, Muslim)",
+      "Niemand van jullie gelooft echt totdat hij voor zijn broer houdt wat hij voor zichzelf houdt. (Bukhari, Muslim)",
+      "De besten onder jullie zijn degenen met de beste manieren en karakter. (Bukhari)",
+      "Zoek kennis van de wieg tot het graf.",
+      "De beste rijkdom is de rijkdom van de ziel. (Bukhari, Muslim)",
+      "Wanneer een man sterft, komen zijn daden tot een einde, behalve drie dingen: Sadaqah Jariyah (voortdurende liefdadigheid), nuttige kennis of een rechtschapen kind dat voor hem bidt. (Muslim)",
+      "De meest geliefde daden aan Allah zijn degenen die consistent worden uitgevoerd, ook al zijn ze klein. (Bukhari, Muslim)",
+      "Allah kijkt niet naar je uiterlijk of je rijkdom, maar naar je hart en daden. (Muslim)",
+      "De besten onder jullie zijn degenen die anderen voeden en hen groeten die zij kennen en die zij niet kennen. (Bukhari, Muslim)",
+      "Hij die geen genade toont aan mensen, zal geen genade van Allah ontvangen. (Bukhari, Muslim)",
+      "Een goed woord is liefdadigheid. (Bukhari, Muslim)",
+      "De meest geliefde plaatsen bij Allah zijn de moskeeën. (Muslim)",
+      "De wereld is een gevangenis voor de gelovige en een paradijs voor de ongelovige. (Muslim)",
+      "De besten onder jullie zijn degenen die de Koran leren en onderwijzen. (Bukhari)",
+      "De gelovige lastert niet, vloekt niet en spreekt niet op een obscene of grove manier. (Tirmidhi)",
+      "Er is geen ziekte die Allah heeft geschapen, behalve dat Hij ook een behandeling ervoor heeft geschapen. (Bukhari)",
+      "Degene die een pad bewandelt op zoek naar kennis, Allah zal het pad naar het Paradijs voor hem gemakkelijk maken. (Muslim)",
+      "Verspil geen water, zelfs niet als je ablutie doet aan de oever van een overvloedig stromende rivier. (Ibn Majah)",
+      "De meest complete gelovigen in geloof zijn degenen met het beste karakter. (Tirmidhi)",
+      "Niemand van jullie zal het Paradijs binnengaan door zijn daden alleen, tenzij Allah Zijn Genade aan hem schenkt. (Muslim)",
+      "Hij die een moskee voor Allah bouwt, Allah zal een huis voor hem bouwen in het Paradijs. (Bukhari, Muslim)",
+      "Wie een moeilijkheid van een gelovige in deze wereld wegneemt, Allah zal een moeilijkheid van hem wegnemen op de Dag der Opstanding. (Muslim)",
+      "Glimlachen in het gezicht van je broer is een daad van liefdadigheid. (Tirmidhi)",
+      "Hij die geen genade toont aan onze kinderen, noch de rechten van onze ouderen erkent, behoort niet tot ons. (Tirmidhi)",
+      "De beste smeekbede is de smeekbede op de Dag van Arafah. (Tirmidhi)",
+      "Wees barmhartig voor degenen op aarde, en Degene boven de hemelen zal barmhartig voor je zijn. (Tirmidhi)",
+      "De beloning van daden hangt af van de intenties. (Bukhari, Muslim)",
+      "De besten van mensen zijn degenen die het meeste voordeel brengen aan anderen. (Daraqutni)",
+      "Voorwaar, Allah is vriendelijk en houdt van vriendelijkheid in alle zaken. (Bukhari, Muslim)",
+      "Hij die in Allah en de Laatste Dag gelooft, moet het goede spreken of zwijgen. (Bukhari, Muslim)",
+      "De dichtstbijzijnden bij mij op de Dag des Oordeels zijn degenen met de beste manieren. (Tirmidhi)",
+      "De beste liefdadigheid is die welke wordt gegeven tijdens Ramadan. (Tirmidhi)",
+      "Reinheid is de helft van het geloof. (Muslim)",
+      "Het Paradijs ligt onder de voeten van je moeder. (Nasai)",
+      "Een moslim is degene die andere moslims niet schaadt met zijn tong en handen. (Bukhari, Muslim)",
+      "De grootste jihad is de strijd tegen je eigen ziel, om het kwaad in jezelf te bestrijden. (Tirmidhi)",
+      "Wie in Allah en de Laatste Dag gelooft, laat hem de familiebanden onderhouden. (Bukhari)",
+      "Voed de hongerigen, bezoek de zieken en bevrijd de gevangenen. (Bukhari)",
+      "Geduld is licht. (Muslim)",
+      "Een gelovige is als een baksteen voor een andere gelovige, de een ondersteunt de ander. (Bukhari, Muslim)",
+      "Wie 'SubhanAllah wa bihamdihi' 100 keer per dag zegt, zal al zijn zonden vergeven krijgen, zelfs als ze zo talrijk zijn als het schuim van de zee. (Bukhari, Muslim)",
+      "Allah zal geen genade tonen aan degene die geen genade toont aan mensen. (Bukhari, Muslim)",
+      "De beste dag waarop de zon is opgekomen, is vrijdag; op die dag werd Adam geschapen. (Muslim)",
+      "Een vader geeft zijn kind niets beters dan een goede opvoeding. (Tirmidhi)",
+      "Benijd elkaar niet, verhoog de prijzen niet kunstmatig, en wend je niet van elkaar af. Wees dienaren van Allah als broeders. (Muslim)",
+      "Degene die eet en dankbaar is, is als degene die vast en geduldig is. (Tirmidhi)",
+      "Bescheidenheid is een deel van het geloof. (Bukhari, Muslim)",
+      "Wie de fouten van een moslim verbergt, Allah zal zijn fouten verbergen op de Dag des Oordeels. (Muslim)",
+      "Doe jezelf of anderen geen kwaad. (Ibn Majah)",
+      "De beste rijkdom is een tevreden hart. (Bukhari)",
+      "De meest geliefde daden aan Allah zijn degenen die regelmatig worden gedaan, ook al zijn ze klein. (Bukhari, Muslim)",
+      "Het beste huis onder de moslims is het huis waar wezen goed worden behandeld. (Ibn Majah)",
+      "Hij die mensen niet dankt, dankt Allah niet. (Tirmidhi)",
+      "Maak dingen gemakkelijk voor mensen en maak het hen niet moeilijk. (Bukhari, Muslim)",
+      "Allah is Mooi en Hij houdt van schoonheid. (Muslim)",
+      "Het beste gebed na de verplichte gebeden is het gebed tijdens de nacht. (Muslim)",
+      "Wie vergiffenis zoekt voor een gelovige, Allah zal hem vergeven. (Muslim)",
+      "Een eerlijke handelaar wordt hoog in aanzien gehouden in het Hiernamaals. (Tirmidhi)",
+      "De beste islam is de hongerigen voeden en de vrede wensen aan degenen die je kent en die je niet kent. (Bukhari, Muslim)",
+      "Beheers je tong en laat het geen leugens uitspreken. (Tirmidhi)",
+      "Liefdadigheid vermindert rijkdom niet. (Muslim)",
+      "Rijkdom ligt niet in een overvloed aan wereldse goederen, maar rijkdom is de rijkdom van de ziel. (Bukhari, Muslim)",
+      "Bezoek de zieken, voed de hongerigen en bevrijd de gevangenen. (Bukhari)"
+    ],
+    'fr': [
+    "La personne forte n’est pas le bon lutteur. La personne forte est celle qui se maîtrise lorsqu’elle est en colère. (Bukhari, Muslim)",
+    "Aucun de vous ne croit vraiment tant qu’il n’aime pas pour son frère ce qu’il aime pour lui-même. (Bukhari, Muslim)",
+    "Les meilleurs parmi vous sont ceux qui ont les meilleures manières et le meilleur caractère. (Bukhari)",
+    "Cherchez la connaissance du berceau jusqu’à la tombe.",
+    "La meilleure richesse est la richesse de l’âme. (Bukhari, Muslim)",
+    "Lorsqu’un homme meurt, ses œuvres cessent sauf pour trois choses : une aumône continue, un savoir utile ou un enfant vertueux qui invoque pour lui. (Muslim)",
+    "Les actes les plus aimés d’Allah sont ceux qui sont accomplis de manière constante, même s’ils sont peu nombreux. (Bukhari, Muslim)",
+    "Allah ne regarde pas votre apparence ni votre richesse, mais Il regarde vos cœurs et vos actes. (Muslim)",
+    "Les meilleurs parmi vous sont ceux qui nourrissent les autres et saluent ceux qu’ils connaissent et ceux qu’ils ne connaissent pas. (Bukhari, Muslim)",
+    "Celui qui ne fait pas preuve de miséricorde envers les gens ne recevra pas la miséricorde d’Allah. (Bukhari, Muslim)",
+    "Une bonne parole est une aumône. (Bukhari, Muslim)",
+    "Les lieux les plus aimés d’Allah sont les mosquées. (Muslim)",
+    "Ce monde est une prison pour le croyant et un paradis pour le mécréant. (Muslim)",
+    "Les meilleurs parmi vous sont ceux qui apprennent le Coran et l’enseignent. (Bukhari)",
+    "Le croyant n’insulte pas, ne maudit pas et ne parle pas de manière obscène ou grossière. (Tirmidhi)",
+    "Il n’existe aucune maladie qu’Allah ait créée sans qu’Il n’ait également créé son remède. (Bukhari)",
+    "Celui qui emprunte un chemin à la recherche du savoir, Allah lui facilitera le chemin vers le Paradis. (Muslim)",
+    "Ne gaspillez pas l’eau, même si vous faites vos ablutions au bord d’une rivière abondante. (Ibn Majah)",
+    "Les croyants les plus complets dans leur foi sont ceux qui ont le meilleur caractère. (Tirmidhi)",
+    "Aucun de vous n’entrera au Paradis uniquement par ses œuvres, sauf par la miséricorde d’Allah. (Muslim)",
+    "Celui qui construit une mosquée pour Allah, Allah lui construira une maison au Paradis. (Bukhari, Muslim)",
+    "Celui qui soulage une difficulté d’un croyant dans ce monde, Allah le soulagera d’une difficulté le Jour de la Résurrection. (Muslim)",
+    "Sourire au visage de ton frère est une aumône. (Tirmidhi)",
+    "Celui qui n’est pas miséricordieux envers nos enfants et ne respecte pas nos aînés ne fait pas partie de nous. (Tirmidhi)",
+    "La meilleure invocation est celle faite le jour de ‘Arafah. (Tirmidhi)",
+    "Soyez miséricordieux envers ceux qui sont sur la terre, et Celui qui est au-dessus des cieux sera miséricordieux envers vous. (Tirmidhi)",
+    "La récompense des actes dépend des intentions. (Bukhari, Muslim)",
+    "Les meilleurs des gens sont ceux qui apportent le plus de bénéfices aux autres. (Daraqutni)",
+    "Allah est certes Doux et Il aime la douceur dans toute chose. (Bukhari, Muslim)",
+    "Que celui qui croit en Allah et au Jour Dernier dise du bien ou se taise. (Bukhari, Muslim)",
+    "Les plus proches de moi le Jour du Jugement sont ceux qui ont les meilleures manières. (Tirmidhi)",
+    "La meilleure aumône est celle donnée pendant le mois de Ramadan. (Tirmidhi)",
+    "La propreté est la moitié de la foi. (Muslim)",
+    "Le Paradis se trouve sous les pieds de la mère. (Nasai)",
+    "Le musulman est celui dont les autres musulmans sont à l’abri de sa langue et de ses mains. (Bukhari, Muslim)",
+    "Le plus grand jihad est la lutte contre sa propre âme pour combattre le mal en soi. (Tirmidhi)",
+    "Que celui qui croit en Allah et au Jour Dernier entretienne les liens de parenté. (Bukhari)",
+    "Nourrissez les affamés, rendez visite aux malades et libérez les captifs. (Bukhari)",
+    "La patience est lumière. (Muslim)",
+    "Le croyant est comme une brique pour un autre croyant, chacun soutenant l’autre. (Bukhari, Muslim)",
+    "Celui qui dit ‘SubhanAllah wa bihamdihi’ cent fois par jour verra tous ses péchés pardonnés, même s’ils sont aussi nombreux que l’écume de la mer. (Bukhari, Muslim)",
+    "Allah n’accordera pas Sa miséricorde à celui qui ne fait pas preuve de miséricorde envers les gens. (Bukhari, Muslim)",
+    "Le meilleur jour sur lequel le soleil s’est levé est le vendredi ; c’est ce jour-là qu’Adam fut créé. (Muslim)",
+    "Un père ne donne rien de meilleur à son enfant qu’une bonne éducation. (Tirmidhi)",
+    "Ne vous enviez pas, ne gonflez pas artificiellement les prix et ne vous détournez pas les uns des autres. Soyez des serviteurs d’Allah comme des frères. (Muslim)",
+    "Celui qui mange et remercie est comme celui qui jeûne et patiente. (Tirmidhi)",
+    "La pudeur fait partie de la foi. (Bukhari, Muslim)",
+    "Celui qui couvre les fautes d’un musulman, Allah couvrira ses fautes le Jour du Jugement. (Muslim)",
+    "Ne vous causez pas de tort à vous-mêmes ni aux autres. (Ibn Majah)",
+    "La meilleure richesse est un cœur satisfait. (Bukhari)",
+    "La maison la meilleure parmi les musulmans est celle où les orphelins sont bien traités. (Ibn Majah)",
+    "Celui qui ne remercie pas les gens ne remercie pas Allah. (Tirmidhi)",
+    "Facilitez les choses aux gens et ne les rendez pas difficiles. (Bukhari, Muslim)",
+    "Allah est Beau et Il aime la beauté. (Muslim)",
+    "La meilleure prière après les prières obligatoires est la prière nocturne. (Muslim)",
+    "Celui qui demande pardon pour un croyant, Allah lui pardonnera. (Muslim)",
+    "Le commerçant honnête aura un rang élevé dans l’au-delà. (Tirmidhi)",
+    "La meilleure pratique de l’islam est de nourrir les affamés et de souhaiter la paix à ceux que l’on connaît et à ceux que l’on ne connaît pas. (Bukhari, Muslim)",
+    "Maîtrise ta langue et ne la laisse pas proférer des mensonges. (Tirmidhi)",
+    "L’aumône ne diminue pas la richesse. (Muslim)",
+    "La richesse ne réside pas dans l’abondance des biens matériels, mais dans la richesse de l’âme. (Bukhari, Muslim)",
+    "Rendez visite aux malades, nourrissez les affamés et libérez les captifs. (Bukhari)"
+  ],
+    'de': [
+     "Der Starke ist nicht der gute Ringer. Der Starke ist derjenige, der sich beherrscht, wenn er wütend ist. (Bukhari, Muslim)",
+    "Keiner von euch glaubt wahrhaftig, bis er für seinen Bruder liebt, was er für sich selbst liebt. (Bukhari, Muslim)",
+    "Die Besten unter euch sind diejenigen mit den besten Manieren und dem besten Charakter. (Bukhari)",
+    "Suche Wissen von der Wiege bis zum Grab.",
+    "Der beste Reichtum ist der Reichtum der Seele. (Bukhari, Muslim)",
+    "Wenn ein Mensch stirbt, enden seine Taten, außer drei: fortwährende Wohltätigkeit, nützliches Wissen oder ein rechtschaffenes Kind, das für ihn betet. (Muslim)",
+    "Die Allah am meisten geliebten Taten sind jene, die regelmäßig verrichtet werden, auch wenn sie gering sind. (Bukhari, Muslim)",
+    "Allah schaut nicht auf euer Aussehen oder euren Reichtum, sondern auf eure Herzen und eure Taten. (Muslim)",
+    "Die Besten unter euch sind diejenigen, die andere speisen und diejenigen grüßen, die sie kennen und die sie nicht kennen. (Bukhari, Muslim)",
+    "Wer den Menschen keine Barmherzigkeit erweist, dem wird Allah keine Barmherzigkeit erweisen. (Bukhari, Muslim)",
+    "Ein gutes Wort ist eine Wohltätigkeit. (Bukhari, Muslim)",
+    "Die Allah am meisten geliebten Orte sind die Moscheen. (Muslim)",
+    "Diese Welt ist ein Gefängnis für den Gläubigen und ein Paradies für den Ungläubigen. (Muslim)",
+    "Die Besten unter euch sind diejenigen, die den Koran lernen und lehren. (Bukhari)",
+    "Der Gläubige beschimpft nicht, verflucht nicht und spricht nicht obszön oder grob. (Tirmidhi)",
+    "Es gibt keine Krankheit, die Allah erschaffen hat, ohne dass Er auch ein Heilmittel dafür erschaffen hat. (Bukhari)",
+    "Wer einen Weg beschreitet, um Wissen zu suchen, dem erleichtert Allah den Weg ins Paradies. (Muslim)",
+    "Verschwendet kein Wasser, selbst wenn ihr die Gebetswaschung an einem reichlich fließenden Fluss verrichtet. (Ibn Majah)",
+    "Die vollkommensten Gläubigen im Glauben sind diejenigen mit dem besten Charakter. (Tirmidhi)",
+    "Keiner von euch wird allein durch seine Taten ins Paradies eintreten, außer durch Allahs Barmherzigkeit. (Muslim)",
+    "Wer für Allah eine Moschee baut, dem baut Allah ein Haus im Paradies. (Bukhari, Muslim)",
+    "Wer einem Gläubigen in dieser Welt eine Sorge nimmt, dem nimmt Allah eine Sorge am Tage des Gerichts. (Muslim)",
+    "Deinem Bruder ins Gesicht zu lächeln ist eine Wohltätigkeit. (Tirmidhi)",
+    "Wer unseren Kindern keine Barmherzigkeit zeigt und die Rechte unserer Älteren nicht anerkennt, gehört nicht zu uns. (Tirmidhi)",
+    "Das beste Bittgebet ist das Bittgebet am Tag von ‘Arafah. (Tirmidhi)",
+    "Seid barmherzig zu denen auf Erden, so wird Der über den Himmeln barmherzig zu euch sein. (Tirmidhi)",
+    "Der Lohn der Taten richtet sich nach den Absichten. (Bukhari, Muslim)",
+    "Die besten Menschen sind diejenigen, die den größten Nutzen für andere bringen. (Daraqutni)",
+    "Wahrlich, Allah ist gütig und liebt die Güte in allen Angelegenheiten. (Bukhari, Muslim)",
+    "Wer an Allah und den Jüngsten Tag glaubt, soll Gutes sprechen oder schweigen. (Bukhari, Muslim)",
+    "Diejenigen, die mir am Tage des Gerichts am nächsten stehen werden, sind jene mit den besten Manieren. (Tirmidhi)",
+    "Die beste Wohltätigkeit ist die, die im Monat Ramadan gegeben wird. (Tirmidhi)",
+    "Reinheit ist die Hälfte des Glaubens. (Muslim)",
+    "Das Paradies liegt unter den Füßen der Mutter. (Nasai)",
+    "Ein Muslim ist derjenige, vor dessen Zunge und Händen andere Muslime sicher sind. (Bukhari, Muslim)",
+    "Der größte Dschihad ist der Kampf gegen das eigene Selbst, um das Böse in sich zu überwinden. (Tirmidhi)",
+    "Wer an Allah und den Jüngsten Tag glaubt, soll die Verwandtschaftsbande pflegen. (Bukhari)",
+    "Speist die Hungrigen, besucht die Kranken und befreit die Gefangenen. (Bukhari)",
+    "Geduld ist Licht. (Muslim)",
+    "Ein Gläubiger ist für einen anderen Gläubigen wie ein Baustein, der den anderen stützt. (Bukhari, Muslim)",
+    "Wer hundertmal am Tag ‚SubhanAllah wa bihamdihi‘ spricht, dem werden alle Sünden vergeben, selbst wenn sie so zahlreich sind wie der Schaum des Meeres. (Bukhari, Muslim)",
+    "Allah wird demjenigen keine Barmherzigkeit erweisen, der den Menschen keine Barmherzigkeit zeigt. (Bukhari, Muslim)",
+    "Der beste Tag, an dem die Sonne aufgegangen ist, ist der Freitag; an diesem Tag wurde Adam erschaffen. (Muslim)",
+    "Ein Vater gibt seinem Kind nichts Besseres als eine gute Erziehung. (Tirmidhi)",
+    "Neidet einander nicht, treibt die Preise nicht künstlich in die Höhe und wendet euch nicht voneinander ab. Seid Diener Allahs als Brüder. (Muslim)",
+    "Wer isst und dankbar ist, ist wie derjenige, der fastet und geduldig ist. (Tirmidhi)",
+    "Bescheidenheit ist ein Teil des Glaubens. (Bukhari, Muslim)",
+    "Wer die Fehler eines Muslims bedeckt, dem wird Allah seine Fehler am Tage des Gerichts bedecken. (Muslim)",
+    "Fügt euch selbst und anderen keinen Schaden zu. (Ibn Majah)",
+    "Der beste Reichtum ist ein zufriedenes Herz. (Bukhari)",
+    "Das beste Haus unter den Muslimen ist das Haus, in dem Waisen gut behandelt werden. (Ibn Majah)",
+    "Wer den Menschen nicht dankt, dankt Allah nicht. (Tirmidhi)",
+    "Macht es den Menschen leicht und erschwert es ihnen nicht. (Bukhari, Muslim)",
+    "Allah ist schön und liebt die Schönheit. (Muslim)",
+    "Das beste Gebet nach den Pflichtgebeten ist das Nachtgebet. (Muslim)",
+    "Wer für einen Gläubigen um Vergebung bittet, dem wird Allah vergeben. (Muslim)",
+    "Der ehrliche Händler wird im Jenseits einen hohen Rang haben. (Tirmidhi)",
+    "Der beste Islam ist es, die Hungrigen zu speisen und den Friedensgruß sowohl denen zu geben, die man kennt, als auch denen, die man nicht kennt. (Bukhari, Muslim)",
+    "Beherrsche deine Zunge und lasse sie keine Lügen aussprechen. (Tirmidhi)",
+    "Wohltätigkeit vermindert den Reichtum nicht. (Muslim)",
+    "Reichtum liegt nicht im Überfluss weltlicher Güter, sondern im Reichtum der Seele. (Bukhari, Muslim)",
+    "Besucht die Kranken, speist die Hungrigen und befreit die Gefangenen. (Bukhari)"
+    ],
+    'ar': [
+  "القوي ليس بالصرعة، إنما القوي الذي يملك نفسه عند الغضب. (البخاري، مسلم)",
+  "لا يؤمن أحدكم حتى يحب لأخيه ما يحب لنفسه. (البخاري، مسلم)",
+  "خيركم أحسنكم أخلاقًا. (البخاري)",
+  "اطلبوا العلم من المهد إلى اللحد.",
+  "ليس الغنى عن كثرة العرض، ولكن الغنى غنى النفس. (البخاري، مسلم)",
+  "إذا مات الإنسان انقطع عمله إلا من ثلاث: صدقة جارية، أو علم يُنتفع به، أو ولد صالح يدعو له. (مسلم)",
+  "أحب الأعمال إلى الله أدومها وإن قل. (البخاري، مسلم)",
+  "إن الله لا ينظر إلى صوركم ولا إلى أموالكم ولكن ينظر إلى قلوبكم وأعمالكم. (مسلم)",
+  "خيركم من أطعم الطعام وأفشى السلام على من عرف ومن لم يعرف. (البخاري، مسلم)",
+  "من لا يرحم الناس لا يرحمه الله. (البخاري، مسلم)",
+  "الكلمة الطيبة صدقة. (البخاري، مسلم)",
+  "أحب البلاد إلى الله مساجدها. (مسلم)",
+  "الدنيا سجن المؤمن وجنة الكافر. (مسلم)",
+  "خيركم من تعلم القرآن وعلمه. (البخاري)",
+  "ليس المؤمن بالطعان ولا اللعان ولا الفاحش ولا البذيء. (الترمذي)",
+  "ما أنزل الله داء إلا أنزل له شفاء. (البخاري)",
+  "من سلك طريقًا يلتمس فيه علمًا سهل الله له به طريقًا إلى الجنة. (مسلم)",
+  "لا تسرف في الماء ولو كنت على نهر جارٍ. (ابن ماجه)",
+  "أكمل المؤمنين إيمانًا أحسنهم خلقًا. (الترمذي)",
+  "لن يدخل أحدكم الجنة بعمله إلا أن يتغمده الله برحمته. (مسلم)",
+  "من بنى مسجدًا لله بنى الله له بيتًا في الجنة. (البخاري، مسلم)",
+  "من فرّج عن مسلم كربة فرّج الله عنه كربة من كرب يوم القيامة. (مسلم)",
+  "تبسمك في وجه أخيك صدقة. (الترمذي)",
+  "ليس منا من لم يرحم صغيرنا ويوقر كبيرنا. (الترمذي)",
+  "أفضل الدعاء دعاء يوم عرفة. (الترمذي)",
+  "ارحموا من في الأرض يرحمكم من في السماء. (الترمذي)",
+  "إنما الأعمال بالنيات. (البخاري، مسلم)",
+  "خير الناس أنفعهم للناس. (الدارقطني)",
+  "إن الله رفيق يحب الرفق في الأمر كله. (البخاري، مسلم)",
+  "من كان يؤمن بالله واليوم الآخر فليقل خيرًا أو ليصمت. (البخاري، مسلم)",
+  "أقربكم مني يوم القيامة أحاسنكم أخلاقًا. (الترمذي)",
+  "أفضل الصدقة صدقة في رمضان. (الترمذي)",
+  "الطهور شطر الإيمان. (مسلم)",
+  "الجنة تحت أقدام الأمهات. (النسائي)",
+  "المسلم من سلم المسلمون من لسانه ويده. (البخاري، مسلم)",
+  "أفضل الجهاد جهاد النفس. (الترمذي)",
+  "من كان يؤمن بالله واليوم الآخر فليصل رحمه. (البخاري)",
+  "أطعموا الجائع وعودوا المريض وفكوا العاني. (البخاري)",
+  "الصبر ضياء. (مسلم)",
+  "المؤمن للمؤمن كالبنيان يشد بعضه بعضًا. (البخاري، مسلم)",
+  "من قال سبحان الله وبحمده مائة مرة غُفرت ذنوبه ولو كانت مثل زبد البحر. (البخاري، مسلم)",
+  "من لا يرحم لا يُرحم. (البخاري، مسلم)",
+  "خير يوم طلعت عليه الشمس يوم الجمعة. (مسلم)",
+  "ما نحل والد ولده أفضل من أدب حسن. (الترمذي)",
+  "لا تحاسدوا ولا تناجشوا ولا تباغضوا، وكونوا عباد الله إخوانًا. (مسلم)",
+  "الذي يأكل ويشكر كالصائم الصابر. (الترمذي)",
+  "الحياء شعبة من الإيمان. (البخاري، مسلم)",
+  "من ستر مسلمًا ستره الله يوم القيامة. (مسلم)",
+  "لا ضرر ولا ضرار. (ابن ماجه)",
+  "خير المال نفس قانعة. (البخاري)",
+  "خير بيوت المسلمين بيت فيه يتيم يُحسن إليه. (ابن ماجه)",
+  "من لا يشكر الناس لا يشكر الله. (الترمذي)",
+  "يسروا ولا تعسروا. (البخاري، مسلم)",
+  "إن الله جميل يحب الجمال. (مسلم)",
+  "أفضل الصلاة بعد الفريضة صلاة الليل. (مسلم)",
+  "من استغفر للمؤمنين غفر الله له. (مسلم)",
+  "التاجر الصدوق مع النبيين والصديقين والشهداء. (الترمذي)",
+  "أفضل الإسلام إطعام الطعام وإفشاء السلام. (البخاري، مسلم)",
+  "احفظ لسانك. (الترمذي)",
+  "الصدقة لا تنقص المال. (مسلم)",
+  "الغنى غنى النفس. (البخاري، مسلم)",
+  "عودوا المريض وأطعموا الجائع وفكوا العاني. (البخاري)"
+],
+  };
+
+  final List<String> hadiths = [
+    "The strong person is not the good wrestler. The strong person is the one who controls himself when he is angry. (Bukhari, Muslim)",
+    "None of you [truly] believes until he loves for his brother what he loves for himself. (Bukhari, Muslim)",
+    "The best among you are those who have the best manners and character. (Bukhari)",
+    "Seek knowledge from the cradle to the grave.(Ibn Maja, 224)",
+    "The best of wealth is the wealth of the soul. (Bukhari, Muslim)",
+    "When a man dies, his deeds come to an end except for three things: Sadaqah Jariyah (ongoing charity), beneficial knowledge, or a righteous child who prays for him. (Muslim)",
+    "The most beloved actions to Allah are those performed consistently, even if they are small. (Bukhari, Muslim)",
+    "Allah does not look at your appearance or your wealth but looks at your heart and actions. (Muslim)",
+    "The best of you are those who feed others and greet those they know and those they do not know. (Bukhari, Muslim)",
+    "He who is not merciful to people will not be treated mercifully by Allah. (Bukhari, Muslim)",
+    "A good word is charity. (Bukhari, Muslim)",
+    "The most beloved of places to Allah are the mosques. (Muslim)",
+    "The world is a prison for the believer and a paradise for the unbeliever. (Muslim)",
+    "The best of you are those who learn the Qur’an and teach it. (Bukhari)",
+    "The believer does not slander, curse, or speak in an obscene or foul manner. (Tirmidhi)",
+    "There is no disease that Allah has created, except that He also has created its treatment. (Bukhari)",
+    "A person who walks on a path seeking knowledge, Allah will make the path to Paradise easy for him. (Muslim)",
+    "Do not waste water even if you perform ablution on the banks of an abundantly-flowing river. (Ibn Majah)",
+    "The most complete of the believers in faith are those with the best character. (Tirmidhi)",
+    "None of you will enter Paradise by his deeds alone unless Allah bestows His Mercy upon you. (Muslim)",
+    "He who builds a mosque for Allah, Allah will build a house for him in Paradise. (Bukhari, Muslim)",
+    "Whoever removes a hardship of a believer in this world, Allah will remove a hardship from him on the Day of Resurrection. (Muslim)",
+    "Smiling in the face of your brother is an act of charity. (Tirmidhi)",
+    "He who does not show mercy to our children nor acknowledge the rights of our elders is not one of us. (Tirmidhi)",
+    "The best supplication is the supplication on the Day of Arafah. (Tirmidhi)",
+    "Be merciful to those on the earth, and the One above the heavens will have mercy upon you. (Tirmidhi)",
+    "The reward of deeds depends upon the intentions. (Bukhari, Muslim)",
+    "The best of people are those that bring most benefit to others. (Daraqutni)",
+    "Verily, Allah is kind and loves kindness in all matters. (Bukhari, Muslim)",
+    "He who believes in Allah and the Last Day should either speak good or remain silent. (Bukhari, Muslim)",
+    "The closest to me on the Day of Judgment are those who have the best manners. (Tirmidhi)",
+    "The best charity is that given in Ramadan. (Tirmidhi)",
+    "Cleanliness is half of faith. (Muslim)",
+    "Paradise lies under the feet of your mother. (Nasai)",
+    "A Muslim is the one who avoids harming Muslims with his tongue and hands. (Bukhari, Muslim)",
+    "The greatest jihad is to battle your own soul, to fight the evil within yourself. (Tirmidhi)",
+    "Whoever believes in Allah and the Last Day, let him maintain the bonds of kinship. (Bukhari)",
+    "Feed the hungry, visit the sick, and free the captives. (Bukhari)",
+    "Patience is light. (Muslim)",
+    "A believer is like a brick for another believer, the one supporting the other. (Bukhari, Muslim)",
+    "Whoever says, 'SubhanAllah wa bihamdihi' 100 times a day, will have all his sins forgiven even if they were as much as the foam of the sea. (Bukhari, Muslim)",
+    "Allah will not show mercy to him who is not merciful to people. (Bukhari, Muslim)",
+    "The best day on which the sun has risen is Friday; on it Adam was created. (Muslim)",
+    "A father gives his child nothing better than a good education. (Tirmidhi)",
+    "Do not envy one another, do not inflate prices, and do not turn away from one another. Be servants of Allah as brothers. (Muslim)",
+    "The one who eats and is grateful is like the one who fasts and is patient. (Tirmidhi)",
+    "Modesty is part of faith. (Bukhari, Muslim)",
+    "Whoever conceals the faults of a Muslim, Allah will conceal his faults on the Day of Judgment. (Muslim)",
+    "The strong person is not the good wrestler. The strong person is the one who controls himself when he is angry. (Bukhari, Muslim)",
+    "None of you [truly] believes until he loves for his brother what he loves for himself. (Bukhari, Muslim)",
+    "The best among you are those who have the best manners and character. (Bukhari)",
+    "Seek knowledge from the cradle to the grave.",
+    "The best of wealth is the wealth of the soul. (Bukhari, Muslim)",
+    "When a man dies, his deeds come to an end except for three things: Sadaqah Jariyah (ongoing charity), beneficial knowledge, or a righteous child who prays for him. (Muslim)",
+    "The most beloved actions to Allah are those performed consistently, even if they are small. (Bukhari, Muslim)",
+    "Allah does not look at your appearance or your wealth but looks at your heart and actions. (Muslim)",
+    "The best of you are those who feed others and greet those they know and those they do not know. (Bukhari, Muslim)",
+    "He who is not merciful to people will not be treated mercifully by Allah. (Bukhari, Muslim)",
+    "A good word is charity. (Bukhari, Muslim)",
+    "The most beloved of places to Allah are the mosques. (Muslim)",
+    "The world is a prison for the believer and a paradise for the unbeliever. (Muslim)",
+    "The best of you are those who learn the Qur’an and teach it. (Bukhari)",
+    "The believer does not slander, curse, or speak in an obscene or foul manner. (Tirmidhi)",
+    "There is no disease that Allah has created, except that He also has created its treatment. (Bukhari)",
+    "A person who walks on a path seeking knowledge, Allah will make the path to Paradise easy for him. (Muslim)",
+    "Do not waste water even if you perform ablution on the banks of an abundantly-flowing river. (Ibn Majah)",
+    "The most complete of the believers in faith are those with the best character. (Tirmidhi)",
+    "None of you will enter Paradise by his deeds alone unless Allah bestows His Mercy upon you. (Muslim)",
+    "He who builds a mosque for Allah, Allah will build a house for him in Paradise. (Bukhari, Muslim)",
+    "Whoever removes a hardship of a believer in this world, Allah will remove a hardship from him on the Day of Resurrection. (Muslim)",
+    "Smiling in the face of your brother is an act of charity. (Tirmidhi)",
+    "He who does not show mercy to our children nor acknowledge the rights of our elders is not one of us. (Tirmidhi)",
+    "The best supplication is the supplication on the Day of Arafah. (Tirmidhi)",
+    "Be merciful to those on the earth, and the One above the heavens will have mercy upon you. (Tirmidhi)",
+    "The reward of deeds depends upon the intentions. (Bukhari, Muslim)",
+    "The best of people are those that bring most benefit to others. (Daraqutni)",
+    "Verily, Allah is kind and loves kindness in all matters. (Bukhari, Muslim)",
+    "He who believes in Allah and the Last Day should either speak good or remain silent. (Bukhari, Muslim)",
+    "The closest to me on the Day of Judgment are those who have the best manners. (Tirmidhi)",
+    "The best charity is that given in Ramadan. (Tirmidhi)",
+    "Cleanliness is half of faith. (Muslim)",
+    "Paradise lies under the feet of your mother. (Nasai)",
+    "A Muslim is the one who avoids harming Muslims with his tongue and hands. (Bukhari, Muslim)",
+    "The greatest jihad is to battle your own soul, to fight the evil within yourself. (Tirmidhi)",
+    "Whoever believes in Allah and the Last Day, let him maintain the bonds of kinship. (Bukhari)",
+    "Feed the hungry, visit the sick, and free the captives. (Bukhari)",
+    "Patience is light. (Muslim)",
+    "A believer is like a brick for another believer, the one supporting the other. (Bukhari, Muslim)",
+    "Whoever says, 'SubhanAllah wa bihamdihi' 100 times a day, will have all his sins forgiven even if they were as much as the foam of the sea. (Bukhari, Muslim)",
+    "Allah will not show mercy to him who is not merciful to people. (Bukhari, Muslim)",
+    "The best day on which the sun has risen is Friday; on it Adam was created. (Muslim)",
+    "A father gives his child nothing better than a good education. (Tirmidhi)",
+    "Do not envy one another, do not inflate prices, and do not turn away from one another. Be servants of Allah as brothers. (Muslim)",
+    "The one who eats and is grateful is like the one who fasts and is patient. (Tirmidhi)",
+    "Modesty is part of faith. (Bukhari, Muslim)",
+    "Whoever conceals the faults of a Muslim, Allah will conceal his faults on the Day of Judgment. (Muslim)",
+    "Do not harm yourself or others. (Ibn Majah)",
+    "The best wealth is a contented heart. (Bukhari)",
+    "The most beloved of deeds to Allah are those that are done regularly, even if they are small. (Bukhari, Muslim)",
+    "The best house among Muslims is the house where orphans are well treated. (Ibn Majah)",
+    "He who does not thank people does not thank Allah. (Tirmidhi)",
+    "Make things easy for people and do not make them difficult. (Bukhari, Muslim)",
+    "Allah is Beautiful and He loves beauty. (Muslim)",
+    "The best prayer after the obligatory prayers is prayer during the night. (Muslim)",
+    "Whoever seeks forgiveness for a believer, Allah will forgive them. (Muslim)",
+    "A truthful merchant is held in high regard in the Hereafter. (Tirmidhi)",
+    "The best of Islam is to feed the hungry and to greet with peace those you know and those you do not know. (Bukhari, Muslim)",
+    "Guard your tongue, and do not allow it to utter falsehoods. (Tirmidhi)",
+    "Charity does not decrease wealth. (Muslim)",
+    "Richness does not lie in abundance of worldly goods but richness is the richness of the soul. (Bukhari, Muslim)",
+    "Visit the sick, feed the hungry, and release the captives. (Bukhari)"
+  ];
+  final List<String> hadithsInDutch = [
+    "De sterke persoon is niet de goede worstelaar. De sterke persoon is degene die zichzelf beheerst als hij boos is. (Bukhari, Muslim)",
+    "Niemand van jullie gelooft echt totdat hij voor zijn broer houdt wat hij voor zichzelf houdt. (Bukhari, Muslim)",
+    "De besten onder jullie zijn degenen met de beste manieren en karakter. (Bukhari)",
+    "Zoek kennis van de wieg tot het graf.",
+    "De beste rijkdom is de rijkdom van de ziel. (Bukhari, Muslim)",
+    "Wanneer een man sterft, komen zijn daden tot een einde, behalve drie dingen: Sadaqah Jariyah (voortdurende liefdadigheid), nuttige kennis of een rechtschapen kind dat voor hem bidt. (Muslim)",
+    "De meest geliefde daden aan Allah zijn degenen die consistent worden uitgevoerd, ook al zijn ze klein. (Bukhari, Muslim)",
+    "Allah kijkt niet naar je uiterlijk of je rijkdom, maar naar je hart en daden. (Muslim)",
+    "De besten onder jullie zijn degenen die anderen voeden en hen groeten die zij kennen en die zij niet kennen. (Bukhari, Muslim)",
+    "Hij die geen genade toont aan mensen, zal geen genade van Allah ontvangen. (Bukhari, Muslim)",
+    "Een goed woord is liefdadigheid. (Bukhari, Muslim)",
+    "De meest geliefde plaatsen bij Allah zijn de moskeeën. (Muslim)",
+    "De wereld is een gevangenis voor de gelovige en een paradijs voor de ongelovige. (Muslim)",
+    "De besten onder jullie zijn degenen die de Koran leren en onderwijzen. (Bukhari)",
+    "De gelovige lastert niet, vloekt niet en spreekt niet op een obscene of grove manier. (Tirmidhi)",
+    "Er is geen ziekte die Allah heeft geschapen, behalve dat Hij ook een behandeling ervoor heeft geschapen. (Bukhari)",
+    "Degene die een pad bewandelt op zoek naar kennis, Allah zal het pad naar het Paradijs voor hem gemakkelijk maken. (Muslim)",
+    "Verspil geen water, zelfs niet als je ablutie doet aan de oever van een overvloedig stromende rivier. (Ibn Majah)",
+    "De meest complete gelovigen in geloof zijn degenen met het beste karakter. (Tirmidhi)",
+    "Niemand van jullie zal het Paradijs binnengaan door zijn daden alleen, tenzij Allah Zijn Genade aan hem schenkt. (Muslim)",
+    "Hij die een moskee voor Allah bouwt, Allah zal een huis voor hem bouwen in het Paradijs. (Bukhari, Muslim)",
+    "Wie een moeilijkheid van een gelovige in deze wereld wegneemt, Allah zal een moeilijkheid van hem wegnemen op de Dag der Opstanding. (Muslim)",
+    "Glimlachen in het gezicht van je broer is een daad van liefdadigheid. (Tirmidhi)",
+    "Hij die geen genade toont aan onze kinderen, noch de rechten van onze ouderen erkent, behoort niet tot ons. (Tirmidhi)",
+    "De beste smeekbede is de smeekbede op de Dag van Arafah. (Tirmidhi)",
+    "Wees barmhartig voor degenen op aarde, en Degene boven de hemelen zal barmhartig voor je zijn. (Tirmidhi)",
+    "De beloning van daden hangt af van de intenties. (Bukhari, Muslim)",
+    "De besten van mensen zijn degenen die het meeste voordeel brengen aan anderen. (Daraqutni)",
+    "Voorwaar, Allah is vriendelijk en houdt van vriendelijkheid in alle zaken. (Bukhari, Muslim)",
+    "Hij die in Allah en de Laatste Dag gelooft, moet het goede spreken of zwijgen. (Bukhari, Muslim)",
+    "De dichtstbijzijnden bij mij op de Dag des Oordeels zijn degenen met de beste manieren. (Tirmidhi)",
+    "De beste liefdadigheid is die welke wordt gegeven tijdens Ramadan. (Tirmidhi)",
+    "Reinheid is de helft van het geloof. (Muslim)",
+    "Het Paradijs ligt onder de voeten van je moeder. (Nasai)",
+    "Een moslim is degene die andere moslims niet schaadt met zijn tong en handen. (Bukhari, Muslim)",
+    "De grootste jihad is de strijd tegen je eigen ziel, om het kwaad in jezelf te bestrijden. (Tirmidhi)",
+    "Wie in Allah en de Laatste Dag gelooft, laat hem de familiebanden onderhouden. (Bukhari)",
+    "Voed de hongerigen, bezoek de zieken en bevrijd de gevangenen. (Bukhari)",
+    "Geduld is licht. (Muslim)",
+    "Een gelovige is als een baksteen voor een andere gelovige, de een ondersteunt de ander. (Bukhari, Muslim)",
+    "Wie 'SubhanAllah wa bihamdihi' 100 keer per dag zegt, zal al zijn zonden vergeven krijgen, zelfs als ze zo talrijk zijn als het schuim van de zee. (Bukhari, Muslim)",
+    "Allah zal geen genade tonen aan degene die geen genade toont aan mensen. (Bukhari, Muslim)",
+    "De beste dag waarop de zon is opgekomen, is vrijdag; op die dag werd Adam geschapen. (Muslim)",
+    "Een vader geeft zijn kind niets beters dan een goede opvoeding. (Tirmidhi)",
+    "Benijd elkaar niet, verhoog de prijzen niet kunstmatig, en wend je niet van elkaar af. Wees dienaren van Allah als broeders. (Muslim)",
+    "Degene die eet en dankbaar is, is als degene die vast en geduldig is. (Tirmidhi)",
+    "Bescheidenheid is een deel van het geloof. (Bukhari, Muslim)",
+    "Wie de fouten van een moslim verbergt, Allah zal zijn fouten verbergen op de Dag des Oordeels. (Muslim)",
+    "Doe jezelf of anderen geen kwaad. (Ibn Majah)",
+    "De beste rijkdom is een tevreden hart. (Bukhari)",
+    "De meest geliefde daden aan Allah zijn degenen die regelmatig worden gedaan, ook al zijn ze klein. (Bukhari, Muslim)",
+    "Het beste huis onder de moslims is het huis waar wezen goed worden behandeld. (Ibn Majah)",
+    "Hij die mensen niet dankt, dankt Allah niet. (Tirmidhi)",
+    "Maak dingen gemakkelijk voor mensen en maak het hen niet moeilijk. (Bukhari, Muslim)",
+    "Allah is Mooi en Hij houdt van schoonheid. (Muslim)",
+    "Het beste gebed na de verplichte gebeden is het gebed tijdens de nacht. (Muslim)",
+    "Wie vergiffenis zoekt voor een gelovige, Allah zal hem vergeven. (Muslim)",
+    "Een eerlijke handelaar wordt hoog in aanzien gehouden in het Hiernamaals. (Tirmidhi)",
+    "De beste islam is de hongerigen voeden en de vrede wensen aan degenen die je kent en die je niet kent. (Bukhari, Muslim)",
+    "Beheers je tong en laat het geen leugens uitspreken. (Tirmidhi)",
+    "Liefdadigheid vermindert rijkdom niet. (Muslim)",
+    "Rijkdom ligt niet in een overvloed aan wereldse goederen, maar rijkdom is de rijkdom van de ziel. (Bukhari, Muslim)",
+    "Bezoek de zieken, voed de hongerigen en bevrijd de gevangenen. (Bukhari)"
+  ];
+
+  final List<String> hadithsInFrench = [
+    "La personne forte n’est pas le bon lutteur. La personne forte est celle qui se maîtrise lorsqu’elle est en colère. (Bukhari, Muslim)",
+    "Aucun de vous ne croit vraiment tant qu’il n’aime pas pour son frère ce qu’il aime pour lui-même. (Bukhari, Muslim)",
+    "Les meilleurs parmi vous sont ceux qui ont les meilleures manières et le meilleur caractère. (Bukhari)",
+    "Cherchez la connaissance du berceau jusqu’à la tombe.",
+    "La meilleure richesse est la richesse de l’âme. (Bukhari, Muslim)",
+    "Lorsqu’un homme meurt, ses œuvres cessent sauf pour trois choses : une aumône continue, un savoir utile ou un enfant vertueux qui invoque pour lui. (Muslim)",
+    "Les actes les plus aimés d’Allah sont ceux qui sont accomplis de manière constante, même s’ils sont peu nombreux. (Bukhari, Muslim)",
+    "Allah ne regarde pas votre apparence ni votre richesse, mais Il regarde vos cœurs et vos actes. (Muslim)",
+    "Les meilleurs parmi vous sont ceux qui nourrissent les autres et saluent ceux qu’ils connaissent et ceux qu’ils ne connaissent pas. (Bukhari, Muslim)",
+    "Celui qui ne fait pas preuve de miséricorde envers les gens ne recevra pas la miséricorde d’Allah. (Bukhari, Muslim)",
+    "Une bonne parole est une aumône. (Bukhari, Muslim)",
+    "Les lieux les plus aimés d’Allah sont les mosquées. (Muslim)",
+    "Ce monde est une prison pour le croyant et un paradis pour le mécréant. (Muslim)",
+    "Les meilleurs parmi vous sont ceux qui apprennent le Coran et l’enseignent. (Bukhari)",
+    "Le croyant n’insulte pas, ne maudit pas et ne parle pas de manière obscène ou grossière. (Tirmidhi)",
+    "Il n’existe aucune maladie qu’Allah ait créée sans qu’Il n’ait également créé son remède. (Bukhari)",
+    "Celui qui emprunte un chemin à la recherche du savoir, Allah lui facilitera le chemin vers le Paradis. (Muslim)",
+    "Ne gaspillez pas l’eau, même si vous faites vos ablutions au bord d’une rivière abondante. (Ibn Majah)",
+    "Les croyants les plus complets dans leur foi sont ceux qui ont le meilleur caractère. (Tirmidhi)",
+    "Aucun de vous n’entrera au Paradis uniquement par ses œuvres, sauf par la miséricorde d’Allah. (Muslim)",
+    "Celui qui construit une mosquée pour Allah, Allah lui construira une maison au Paradis. (Bukhari, Muslim)",
+    "Celui qui soulage une difficulté d’un croyant dans ce monde, Allah le soulagera d’une difficulté le Jour de la Résurrection. (Muslim)",
+    "Sourire au visage de ton frère est une aumône. (Tirmidhi)",
+    "Celui qui n’est pas miséricordieux envers nos enfants et ne respecte pas nos aînés ne fait pas partie de nous. (Tirmidhi)",
+    "La meilleure invocation est celle faite le jour de ‘Arafah. (Tirmidhi)",
+    "Soyez miséricordieux envers ceux qui sont sur la terre, et Celui qui est au-dessus des cieux sera miséricordieux envers vous. (Tirmidhi)",
+    "La récompense des actes dépend des intentions. (Bukhari, Muslim)",
+    "Les meilleurs des gens sont ceux qui apportent le plus de bénéfices aux autres. (Daraqutni)",
+    "Allah est certes Doux et Il aime la douceur dans toute chose. (Bukhari, Muslim)",
+    "Que celui qui croit en Allah et au Jour Dernier dise du bien ou se taise. (Bukhari, Muslim)",
+    "Les plus proches de moi le Jour du Jugement sont ceux qui ont les meilleures manières. (Tirmidhi)",
+    "La meilleure aumône est celle donnée pendant le mois de Ramadan. (Tirmidhi)",
+    "La propreté est la moitié de la foi. (Muslim)",
+    "Le Paradis se trouve sous les pieds de la mère. (Nasai)",
+    "Le musulman est celui dont les autres musulmans sont à l’abri de sa langue et de ses mains. (Bukhari, Muslim)",
+    "Le plus grand jihad est la lutte contre sa propre âme pour combattre le mal en soi. (Tirmidhi)",
+    "Que celui qui croit en Allah et au Jour Dernier entretienne les liens de parenté. (Bukhari)",
+    "Nourrissez les affamés, rendez visite aux malades et libérez les captifs. (Bukhari)",
+    "La patience est lumière. (Muslim)",
+    "Le croyant est comme une brique pour un autre croyant, chacun soutenant l’autre. (Bukhari, Muslim)",
+    "Celui qui dit ‘SubhanAllah wa bihamdihi’ cent fois par jour verra tous ses péchés pardonnés, même s’ils sont aussi nombreux que l’écume de la mer. (Bukhari, Muslim)",
+    "Allah n’accordera pas Sa miséricorde à celui qui ne fait pas preuve de miséricorde envers les gens. (Bukhari, Muslim)",
+    "Le meilleur jour sur lequel le soleil s’est levé est le vendredi ; c’est ce jour-là qu’Adam fut créé. (Muslim)",
+    "Un père ne donne rien de meilleur à son enfant qu’une bonne éducation. (Tirmidhi)",
+    "Ne vous enviez pas, ne gonflez pas artificiellement les prix et ne vous détournez pas les uns des autres. Soyez des serviteurs d’Allah comme des frères. (Muslim)",
+    "Celui qui mange et remercie est comme celui qui jeûne et patiente. (Tirmidhi)",
+    "La pudeur fait partie de la foi. (Bukhari, Muslim)",
+    "Celui qui couvre les fautes d’un musulman, Allah couvrira ses fautes le Jour du Jugement. (Muslim)",
+    "Ne vous causez pas de tort à vous-mêmes ni aux autres. (Ibn Majah)",
+    "La meilleure richesse est un cœur satisfait. (Bukhari)",
+    "La maison la meilleure parmi les musulmans est celle où les orphelins sont bien traités. (Ibn Majah)",
+    "Celui qui ne remercie pas les gens ne remercie pas Allah. (Tirmidhi)",
+    "Facilitez les choses aux gens et ne les rendez pas difficiles. (Bukhari, Muslim)",
+    "Allah est Beau et Il aime la beauté. (Muslim)",
+    "La meilleure prière après les prières obligatoires est la prière nocturne. (Muslim)",
+    "Celui qui demande pardon pour un croyant, Allah lui pardonnera. (Muslim)",
+    "Le commerçant honnête aura un rang élevé dans l’au-delà. (Tirmidhi)",
+    "La meilleure pratique de l’islam est de nourrir les affamés et de souhaiter la paix à ceux que l’on connaît et à ceux que l’on ne connaît pas. (Bukhari, Muslim)",
+    "Maîtrise ta langue et ne la laisse pas proférer des mensonges. (Tirmidhi)",
+    "L’aumône ne diminue pas la richesse. (Muslim)",
+    "La richesse ne réside pas dans l’abondance des biens matériels, mais dans la richesse de l’âme. (Bukhari, Muslim)",
+    "Rendez visite aux malades, nourrissez les affamés et libérez les captifs. (Bukhari)"
+  ];
+  final List<String> hadithsInGerman = [
+    "Der Starke ist nicht der gute Ringer. Der Starke ist derjenige, der sich beherrscht, wenn er wütend ist. (Bukhari, Muslim)",
+    "Keiner von euch glaubt wahrhaftig, bis er für seinen Bruder liebt, was er für sich selbst liebt. (Bukhari, Muslim)",
+    "Die Besten unter euch sind diejenigen mit den besten Manieren und dem besten Charakter. (Bukhari)",
+    "Suche Wissen von der Wiege bis zum Grab.",
+    "Der beste Reichtum ist der Reichtum der Seele. (Bukhari, Muslim)",
+    "Wenn ein Mensch stirbt, enden seine Taten, außer drei: fortwährende Wohltätigkeit, nützliches Wissen oder ein rechtschaffenes Kind, das für ihn betet. (Muslim)",
+    "Die Allah am meisten geliebten Taten sind jene, die regelmäßig verrichtet werden, auch wenn sie gering sind. (Bukhari, Muslim)",
+    "Allah schaut nicht auf euer Aussehen oder euren Reichtum, sondern auf eure Herzen und eure Taten. (Muslim)",
+    "Die Besten unter euch sind diejenigen, die andere speisen und diejenigen grüßen, die sie kennen und die sie nicht kennen. (Bukhari, Muslim)",
+    "Wer den Menschen keine Barmherzigkeit erweist, dem wird Allah keine Barmherzigkeit erweisen. (Bukhari, Muslim)",
+    "Ein gutes Wort ist eine Wohltätigkeit. (Bukhari, Muslim)",
+    "Die Allah am meisten geliebten Orte sind die Moscheen. (Muslim)",
+    "Diese Welt ist ein Gefängnis für den Gläubigen und ein Paradies für den Ungläubigen. (Muslim)",
+    "Die Besten unter euch sind diejenigen, die den Koran lernen und lehren. (Bukhari)",
+    "Der Gläubige beschimpft nicht, verflucht nicht und spricht nicht obszön oder grob. (Tirmidhi)",
+    "Es gibt keine Krankheit, die Allah erschaffen hat, ohne dass Er auch ein Heilmittel dafür erschaffen hat. (Bukhari)",
+    "Wer einen Weg beschreitet, um Wissen zu suchen, dem erleichtert Allah den Weg ins Paradies. (Muslim)",
+    "Verschwendet kein Wasser, selbst wenn ihr die Gebetswaschung an einem reichlich fließenden Fluss verrichtet. (Ibn Majah)",
+    "Die vollkommensten Gläubigen im Glauben sind diejenigen mit dem besten Charakter. (Tirmidhi)",
+    "Keiner von euch wird allein durch seine Taten ins Paradies eintreten, außer durch Allahs Barmherzigkeit. (Muslim)",
+    "Wer für Allah eine Moschee baut, dem baut Allah ein Haus im Paradies. (Bukhari, Muslim)",
+    "Wer einem Gläubigen in dieser Welt eine Sorge nimmt, dem nimmt Allah eine Sorge am Tage des Gerichts. (Muslim)",
+    "Deinem Bruder ins Gesicht zu lächeln ist eine Wohltätigkeit. (Tirmidhi)",
+    "Wer unseren Kindern keine Barmherzigkeit zeigt und die Rechte unserer Älteren nicht anerkennt, gehört nicht zu uns. (Tirmidhi)",
+    "Das beste Bittgebet ist das Bittgebet am Tag von ‘Arafah. (Tirmidhi)",
+    "Seid barmherzig zu denen auf Erden, so wird Der über den Himmeln barmherzig zu euch sein. (Tirmidhi)",
+    "Der Lohn der Taten richtet sich nach den Absichten. (Bukhari, Muslim)",
+    "Die besten Menschen sind diejenigen, die den größten Nutzen für andere bringen. (Daraqutni)",
+    "Wahrlich, Allah ist gütig und liebt die Güte in allen Angelegenheiten. (Bukhari, Muslim)",
+    "Wer an Allah und den Jüngsten Tag glaubt, soll Gutes sprechen oder schweigen. (Bukhari, Muslim)",
+    "Diejenigen, die mir am Tage des Gerichts am nächsten stehen werden, sind jene mit den besten Manieren. (Tirmidhi)",
+    "Die beste Wohltätigkeit ist die, die im Monat Ramadan gegeben wird. (Tirmidhi)",
+    "Reinheit ist die Hälfte des Glaubens. (Muslim)",
+    "Das Paradies liegt unter den Füßen der Mutter. (Nasai)",
+    "Ein Muslim ist derjenige, vor dessen Zunge und Händen andere Muslime sicher sind. (Bukhari, Muslim)",
+    "Der größte Dschihad ist der Kampf gegen das eigene Selbst, um das Böse in sich zu überwinden. (Tirmidhi)",
+    "Wer an Allah und den Jüngsten Tag glaubt, soll die Verwandtschaftsbande pflegen. (Bukhari)",
+    "Speist die Hungrigen, besucht die Kranken und befreit die Gefangenen. (Bukhari)",
+    "Geduld ist Licht. (Muslim)",
+    "Ein Gläubiger ist für einen anderen Gläubigen wie ein Baustein, der den anderen stützt. (Bukhari, Muslim)",
+    "Wer hundertmal am Tag ‚SubhanAllah wa bihamdihi‘ spricht, dem werden alle Sünden vergeben, selbst wenn sie so zahlreich sind wie der Schaum des Meeres. (Bukhari, Muslim)",
+    "Allah wird demjenigen keine Barmherzigkeit erweisen, der den Menschen keine Barmherzigkeit zeigt. (Bukhari, Muslim)",
+    "Der beste Tag, an dem die Sonne aufgegangen ist, ist der Freitag; an diesem Tag wurde Adam erschaffen. (Muslim)",
+    "Ein Vater gibt seinem Kind nichts Besseres als eine gute Erziehung. (Tirmidhi)",
+    "Neidet einander nicht, treibt die Preise nicht künstlich in die Höhe und wendet euch nicht voneinander ab. Seid Diener Allahs als Brüder. (Muslim)",
+    "Wer isst und dankbar ist, ist wie derjenige, der fastet und geduldig ist. (Tirmidhi)",
+    "Bescheidenheit ist ein Teil des Glaubens. (Bukhari, Muslim)",
+    "Wer die Fehler eines Muslims bedeckt, dem wird Allah seine Fehler am Tage des Gerichts bedecken. (Muslim)",
+    "Fügt euch selbst und anderen keinen Schaden zu. (Ibn Majah)",
+    "Der beste Reichtum ist ein zufriedenes Herz. (Bukhari)",
+    "Das beste Haus unter den Muslimen ist das Haus, in dem Waisen gut behandelt werden. (Ibn Majah)",
+    "Wer den Menschen nicht dankt, dankt Allah nicht. (Tirmidhi)",
+    "Macht es den Menschen leicht und erschwert es ihnen nicht. (Bukhari, Muslim)",
+    "Allah ist schön und liebt die Schönheit. (Muslim)",
+    "Das beste Gebet nach den Pflichtgebeten ist das Nachtgebet. (Muslim)",
+    "Wer für einen Gläubigen um Vergebung bittet, dem wird Allah vergeben. (Muslim)",
+    "Der ehrliche Händler wird im Jenseits einen hohen Rang haben. (Tirmidhi)",
+    "Der beste Islam ist es, die Hungrigen zu speisen und den Friedensgruß sowohl denen zu geben, die man kennt, als auch denen, die man nicht kennt. (Bukhari, Muslim)",
+    "Beherrsche deine Zunge und lasse sie keine Lügen aussprechen. (Tirmidhi)",
+    "Wohltätigkeit vermindert den Reichtum nicht. (Muslim)",
+    "Reichtum liegt nicht im Überfluss weltlicher Güter, sondern im Reichtum der Seele. (Bukhari, Muslim)",
+    "Besucht die Kranken, speist die Hungrigen und befreit die Gefangenen. (Bukhari)"
+  ];
+
+  DateTime? _lastChange;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _bootstrap();
+    Timer.periodic(const Duration(hours: 15), (_) {
+      _bootstrap();
+      pickRandom(force: true);
+    });
+
+    Timer.periodic(const Duration(hours: 15), (_) {
+      changeHadith();
+    });
+  }
+
+  String get currentHadith => hadithByLanguage[selectedLang.value]![currentHadithIndex.value];
+
+  void changeHadith() {
+    if (hadiths.isEmpty) return;
+    currentHadithIndex.value = (currentHadithIndex.value + 1) % hadiths.length;
+  }
+
+  void nextHadith() {
+    final listLength = hadithByLanguage[selectedLang.value]!.length;
+    currentHadithIndex.value = (currentHadithIndex.value + 1) % listLength;
+  }
+
+  void changeLanguage(String lang) {
+    selectedLang.value = lang;
+
+    final listLenth = hadithByLanguage[selectedLang.value]!.length;
+    if (currentHadithIndex.value >= listLenth) {
+      currentHadithIndex.value = 0; 
+    }
+  }
+
+  Future<void> _bootstrap() async {
+    await _loadPrefs();
+    await _fetchAllUrlsIfEmpty();
+    // If we have a cached image and it's < 24 hours old, keep using it
+    // otherwise pick a new one.
+    await maybePickDaily();
+  }
+
+  Future<void> _fetchAllUrlsIfEmpty() async {
+    if (allImageUrls.isNotEmpty) return;
+
+    final storage = FirebaseStorage.instance.ref(folderPath);
+    // listAll() will fetch up to 1000 items; if you need more, paginate with list().
+    final ListResult result = await storage.listAll();
+
+    final futures = result.items.map((ref) => ref.getDownloadURL());
+    final urls = await Future.wait(futures);
+
+    allImageUrls.assignAll(urls);
+    print('this is all the images ${allImageUrls}');
+  }
+
+  Future<void> _loadPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    final url = prefs.getString(_prefsKeyUrl);
+    final ts = prefs.getInt(_prefsKeyTs);
+    if (url != null) currentImageUrl.value = url;
+    if (ts != null) _lastChange = DateTime.fromMillisecondsSinceEpoch(ts);
+  }
+
+  Future<void> _savePrefs(String url) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_prefsKeyUrl, url);
+    final nowMs = DateTime.now().millisecondsSinceEpoch;
+    await prefs.setInt(_prefsKeyTs, nowMs);
+    _lastChange = DateTime.fromMillisecondsSinceEpoch(nowMs);
+  }
+
+  bool _dueForNewImage() {
+    if (_lastChange == null) return true;
+    return DateTime.now().difference(_lastChange!).inHours >= 24;
+  }
+
+  Future<void> maybePickDaily() async {
+    if (allImageUrls.isEmpty) {
+      // Attempt to (re)load if needed.
+      await _fetchAllUrlsIfEmpty();
+    }
+    if (allImageUrls.isEmpty) return; // Nothing in storage
+
+    if (_dueForNewImage() || currentImageUrl.value.isEmpty) {
+      await pickRandom(force: true);
+    }
+  }
+
+  /// Force-pick a new random image (used for double-tap).
+  Future<void> pickRandom({bool force = false}) async {
+    if (allImageUrls.isEmpty) {
+      await _fetchAllUrlsIfEmpty();
+      if (allImageUrls.isEmpty) return;
+    }
+
+    String nextUrl = currentImageUrl.value;
+    if (allImageUrls.length == 1) {
+      nextUrl = allImageUrls.first;
+    } else {
+      final rng = Random();
+      // Ensure different from current, if possible
+      for (int i = 0; i < 5; i++) {
+        final candidate = allImageUrls[rng.nextInt(allImageUrls.length)];
+        if (candidate != currentImageUrl.value) {
+          nextUrl = candidate;
+          break;
+        }
+      }
+    }
+
+    currentImageUrl.value = nextUrl;
+    await _savePrefs(nextUrl);
+  }
+}

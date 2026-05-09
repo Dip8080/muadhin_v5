@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1079706986558",
+    "project_id": "muadhin-a26a0",
+    "storage_bucket": "muadhin-a26a0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1079706986558:android:87c5928da3c2f0b98f096f",
+        "android_client_info": {
+          "package_name": "com.example.muaddin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKB8MtW3GGwIxWtZc7qELpcSoTm8lxmsk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
