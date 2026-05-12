@@ -399,7 +399,7 @@ SubhanAllahi wa bihamdi, SubhanAllahi al-azeem
         'ar': {
           "restart_muadhin": "إعادة تشغيل المؤذن",
           "click_restart_muadhin": "اضغط لإعادة تشغيل شاشة المؤذن",
-          
+
           'adhan': 'الأذان',
           'bluetooth': 'بلوتوث',
           'wifi': 'واي فاي',
@@ -647,6 +647,111 @@ SubhanAllahi wa bihamdi, SubhanAllahi al-azeem
           "Tawfeeq As-Sayegh": "توفيق الصايغ",
           "Muhammad Al-Muhasny": "محمد المحيسني",
           "Hani Arrifai": "هاني الرفاعي"
+        },
+
+        // Turkish
+        'tr': {
+          "restart_muadhin": "Muadhin’i Yeniden Başlat",
+          "click_restart_muadhin":
+              "Muadhin ekranını yeniden başlatmak için tıklayın",
+
+          'adhan': 'Ezan',
+          'bluetooth': 'Bluetooth',
+          'wifi': 'Wifi',
+          "set_brightness_level": "Parlaklık seviyesini ayarla",
+          "connectWifi": "Wi-Fi’ye bağlan",
+          "selectAdhanSound": "Ezan sesini seç",
+          "connectBluetoothDevices": "Bluetooth cihazlarına bağlan",
+          "selectLanguage": "Dil seç",
+
+          "fajr_title": "Gününe Allah ile başla",
+          "fajr_text": "Sabah namazı için kalk.",
+
+          "dhuhr_title": "Ruhun için bir mola",
+          "dhuhr_text": "Öğle namazı için kalk.",
+
+          "asr_title": "Allah seni çağırıyor",
+          "asr_text": "İkindi namazı için kalk.",
+
+          "maghrib_title": "Gün bitiyor, ezan çağırıyor",
+          "maghrib_text": "Akşam namazı için kalk.",
+
+          "isha_title": "Gününü huzurla bitir",
+          "isha_text": "Yatsı namazı için kalk.",
+
+          'brightness': 'Parlaklık',
+          'Fajr': 'Sabah',
+          'Dhuhr': 'Öğle',
+          'Asr': 'İkindi',
+          'Maghrib': 'Akşam',
+          'Isha': 'Yatsı',
+          'Settings': 'Ayarlar',
+          'time': 'Saat',
+          'Time': 'Saat',
+          'language': 'Dil',
+          'set_time_automatically': 'Saati otomatik ayarla',
+          'set_date_&_time': 'Tarih ve saati ayarla',
+          'date': 'Tarih',
+          'set_time_zone': 'Saat dilimini ayarla',
+          'set_time_manually': 'Saati manuel ayarla',
+          'set_time_zone_manually': 'Saat dilimini manuel ayarla',
+          'select_country': 'Ülke seç',
+          "select_state": "Şehir seç",
+
+          'hadia':
+              '''Dilde hafif, mizanda ağır ve Rahmân’a sevgili olan iki söz vardır:
+SubhanAllahi wa bihamdi, SubhanAllahi al-azeem
+(Allah’ı hamd ile tesbih ederim, Yüce Allah’ı tesbih ederim.)
+(Buhari ve Müslim)''',
+
+          'calling_adhan': 'Ezan okunuyor',
+          'time_for': 'Vakit geldi',
+          'reset': 'Varsayılana sıfırla',
+
+          // Ruqya
+          "surahAlBaqarah": "Bakara Suresi",
+          "generalRuqya": "Genel Rukye",
+          "evilEye": "Nazar (Ayn)",
+          "blackMagic": "Büyü (Sihr)",
+          "knowledge": "İlim",
+          "advice": "Nasihat",
+          "burning": "Yakma (Harq)",
+          "healing": "Şifa",
+          "zina": "Zina",
+          "summarisedRuqya": "Özet Rukye (Mokhtasar)",
+          "divorce": "Boşanma (Talak)",
+          "destruction": "Yıkım (Tadmeer)",
+          "falaqNaas": "Felak ve Nas Sureleri",
+          "ayatKursi": "Ayetel Kürsi",
+          "salawat": "Peygamber’e ﷺ salavat",
+          "jews": "Yahudiler",
+          "christians": "Hristiyanlar",
+          "saaffat": "Saffat Suresi",
+          "jinn": "Cin Suresi",
+          "yaseen": "Yasin Suresi",
+          "birds": "Kuşlar",
+          "rizq": "Rızık",
+          "mountains": "Dağlar",
+          "guidance": "Hidayet ve Tövbe",
+          "hairLoss": "Saç dökülmesi için rukye",
+          "fatihah": "Fatiha Suresi",
+          "lastTwoAyat": "Bakara Suresi’nin son 2 ayeti",
+          "beginningSaaffat": "Saffat Suresi’nin başlangıcı",
+          "planetsStars": "Gezegenler ve yıldızlarla ilgili ayetler",
+          "seaVerses": "Deniz ayetleri",
+          "graveVerses": "Kabir ile ilgili ayetler",
+          "breastCancer": "Meme kanseri için rukye",
+          "walkingIssues": "Yürüme problemleri için rukye",
+
+          // wifi pop up
+          "connect_wifi_title": "Wi-Fi’ye bağlan",
+          "connect_wifi_description":
+              "Namaz vakitlerini göstermek için Muadhin’i internete bağlayın.",
+          "open_wifi_settings": "Wi-Fi ayarlarını aç",
+          "cancel": "İptal",
+
+          "setTimezoneAdjustPrayerTimes":
+              "Saat dilimini ayarla ve namaz vakitlerini düzenle",
         },
       };
 }

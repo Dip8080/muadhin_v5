@@ -751,14 +751,15 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                                                       children: [
                                                         Row(
                                                           children: [
-                                                             Image.asset(
-                                                                    'assets/icons/state.png',
-                                                                    width: 3.w,
-                                                                    height: 3.w,
-                                                                    // color: Colors
-                                                                    //     .white,
-                                                                    color: Colors.blueAccent,
-                                                                  ),
+                                                            Image.asset(
+                                                              'assets/icons/state.png',
+                                                              width: 3.w,
+                                                              height: 3.w,
+                                                              // color: Colors
+                                                              //     .white,
+                                                              color: Colors
+                                                                  .blueAccent,
+                                                            ),
                                                             SizedBox(
                                                                 width: 2.w),
                                                             Text(
@@ -1132,6 +1133,34 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                                                 BorderRadius.circular(10),
                                           ),
                                           child: Text('German'),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 1.w,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.updateLocale(Locale('tr'));
+                                          wallpaperController
+                                              .changeLanguage('tr');
+                                          audioController.isHadia.value = true;
+                                          controllerTwo.selectedLanguage.value =
+                                              'tr';
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 1.w),
+                                          decoration: BoxDecoration(
+                                            color: Colors.blueAccent
+                                                .withOpacity(0.1),
+                                            border: Border.all(
+                                              color: Colors.white,
+                                              width: .4,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Text('Turkish'),
                                         ),
                                       ),
                                     ],
