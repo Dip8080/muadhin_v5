@@ -1168,24 +1168,7 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                                 ),
                               )
                             : SizedBox(),
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     brightnessController.setSettingsPrest('Adhan');
-                        //     brightnessController.toggleSection('adhan');
-                        //   },
-                        //   child: Text(
-                        //     // 'language'.tr,
-                        //     'Adhan',
-                        //     style: Theme.of(context)
-                        //         .textTheme
-                        //         .bodySmall!
-                        //         .copyWith(
-                        //             fontSize: 2.5.w,
-                        //             color: Colors.white,
-                        //             decoration: TextDecoration.underline,
-                        //             decorationColor: Colors.white24),
-                        //   ),
-                        // ),
+                       
                         SettingsTile(
                             icon: Icons.volume_up,
                             title: 'adhan'.tr,
@@ -1212,18 +1195,7 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                                           margin: EdgeInsets.symmetric(
                                               horizontal: 1.5.w,
                                               vertical: 00.w),
-                                          // decoration: BoxDecoration(
-                                          //     color: Colors.white30),
-                                          // decoration: BoxDecoration(
-                                          //   color: Colors.blueAccent
-                                          //       .withOpacity(0.1),
-                                          //   border: Border.all(
-                                          //     color: Colors.white,
-                                          //     width: .4,
-                                          //   ),
-                                          //   borderRadius:
-                                          //       BorderRadius.circular(10),
-                                          // ),
+                                          
                                           child: ListView.builder(
                                             itemCount: audioController
                                                 .muajjinName.length,
