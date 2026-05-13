@@ -753,5 +753,122 @@ SubhanAllahi wa bihamdi, SubhanAllahi al-azeem
           "setTimezoneAdjustPrayerTimes":
               "Saat dilimini ayarla ve namaz vakitlerini düzenle",
         },
+        'bn': {
+          "restart_muadhin": "মুয়াজ্জিন পুনরায় চালু করুন",
+          "click_restart_muadhin":
+              "মুয়াজ্জিন স্ক্রিন পুনরায় চালু করতে ক্লিক করুন",
+
+          'adhan': 'আযান',
+          'bluetooth': 'ব্লুটুথ',
+          'wifi': 'ওয়াইফাই',
+          "set_brightness_level": "উজ্জ্বলতার মাত্রা নির্ধারণ করুন",
+          "connectWifi": "ওয়াইফাই সংযোগ করুন",
+          "selectAdhanSound": "আযানের সাউন্ড নির্বাচন করুন",
+          "connectBluetoothDevices": "ব্লুটুথ ডিভাইস সংযোগ করুন",
+          "selectLanguage": "ভাষা নির্বাচন করুন",
+
+          "fajr_title": "আল্লাহর সাথে দিন শুরু করুন",
+          "fajr_text": "ফজরের নামাজের জন্য উঠুন।",
+
+          "dhuhr_title": "আপনার আত্মার জন্য এক বিরতি",
+          "dhuhr_text": "যোহরের নামাজের জন্য উঠুন।",
+
+          "asr_title": "আল্লাহ আপনাকে ডাকছেন",
+          "asr_text": "আসরের নামাজের জন্য উঠুন।",
+
+          "maghrib_title": "দিন শেষ হয়, আযানের ডাক আসে",
+          "maghrib_text": "মাগরিবের নামাজের জন্য উঠুন।",
+
+          "isha_title": "শান্তির সাথে দিন শেষ করুন",
+          "isha_text": "এশার নামাজের জন্য উঠুন।",
+
+          'brightness': 'উজ্জ্বলতা',
+          'Fajr': 'ফজর',
+          'Dhuhr': 'যোহর',
+          'Asr': 'আসর',
+          'Maghrib': 'মাগরিব',
+          'Isha': 'এশা',
+          'Settings': 'সেটিংস',
+          'time': 'সময়',
+          'Time': 'সময়',
+          'language': 'ভাষা',
+          'set_time_automatically': 'সময় স্বয়ংক্রিয়ভাবে সেট করুন',
+          'set_date_&_time': 'তারিখ ও সময় সেট করুন',
+          'date': 'তারিখ',
+          'set_time_zone': 'টাইম জোন সেট করুন',
+          'set_time_manually': 'ম্যানুয়ালি সময় সেট করুন',
+          'set_time_zone_manually': 'ম্যানুয়ালি টাইম জোন সেট করুন',
+          'select_country': 'দেশ নির্বাচন করুন',
+          "select_state": "শহর নির্বাচন করুন",
+
+          'hadia':
+              '''দুটি বাক্য আছে যা জিহ্বায় হালকা, মিজানে ভারী এবং পরম করুণাময়ের নিকট অতি প্রিয়:
+সুবহানাল্লাহি ওয়া বিহামদিহি, সুবহানাল্লাহিল আযীম
+(আল্লাহ পবিত্র এবং সকল প্রশংসা তাঁর জন্য, মহান আল্লাহ পবিত্র।)
+(বুখারি ও মুসলিম)''',
+
+          'calling_adhan': 'আযান দেওয়া হচ্ছে',
+          'time_for': 'এখন সময়',
+          'reset': 'ডিফল্টে রিসেট করুন',
+
+          // Ruqya
+          "surahAlBaqarah": "সূরা আল-বাকারাহ",
+          "generalRuqya": "সাধারণ রুকইয়াহ",
+          "evilEye": "নজর (আইন)",
+          "blackMagic": "কালো জাদু (সিহর)",
+          "knowledge": "জ্ঞান (ইলম)",
+          "advice": "উপদেশ (নাসীহা)",
+          "burning": "জ্বালাপোড়া (হারক)",
+          "healing": "আরোগ্য (শিফা)",
+          "zina": "ব্যভিচার / জিনা",
+          "summarisedRuqya": "সংক্ষিপ্ত রুকইয়াহ",
+          "divorce": "তালাক",
+          "destruction": "ধ্বংস",
+          "falaqNaas": "সূরা আল-ফালাক ও সূরা আন-নাস",
+          "ayatKursi": "আয়াতুল কুরসি",
+          "salawat": "নবী ﷺ এর উপর দরুদ",
+          "jews": "ইহুদি",
+          "christians": "খ্রিস্টান",
+          "saaffat": "সূরা আস-সাফফাত",
+          "jinn": "সূরা আল-জিন",
+          "yaseen": "সূরা ইয়াসিন",
+          "birds": "পাখি",
+          "rizq": "রিযিক",
+          "mountains": "পাহাড়",
+          "guidance": "হিদায়াত ও তাওবা",
+          "hairLoss": "চুল পড়ার জন্য রুকইয়াহ",
+          "fatihah": "সূরা আল-ফাতিহা",
+          "lastTwoAyat": "সূরা আল-বাকারাহর শেষ ২ আয়াত",
+          "beginningSaaffat": "সূরা আস-সাফফাতের শুরু",
+          "planetsStars": "গ্রহ ও নক্ষত্র সম্পর্কিত আয়াত",
+          "seaVerses": "সমুদ্র সম্পর্কিত আয়াত",
+          "graveVerses": "কবর সম্পর্কিত আয়াত",
+          "breastCancer": "ব্রেস্ট ক্যান্সারের জন্য রুকইয়াহ",
+          "walkingIssues": "হাঁটার সমস্যার জন্য রুকইয়াহ",
+
+          // wifi pop up
+          "connect_wifi_title": "ওয়াইফাই সংযোগ করুন",
+          "connect_wifi_description":
+              "নামাজের সময় দেখানোর জন্য মুয়াজ্জিনকে ইন্টারনেটের সাথে সংযুক্ত করুন।",
+          "open_wifi_settings": "ওয়াইফাই সেটিংস খুলুন",
+          "cancel": "বাতিল",
+
+          "setTimezoneAdjustPrayerTimes":
+              "টাইম জোন সেট করুন ও নামাজের সময় সমন্বয় করুন",
+
+          // Hijri months
+          'Muharram': 'মুহাররম',
+          'Safar': 'সফর',
+          'Rabi_al_awwal': 'রবিউল আউয়াল',
+          'Rabi_al_thani': 'রবিউস সানি',
+          'Jumada_al_awwal': 'জুমাদাল উলা',
+          'Jumada_al_thani': 'জুমাদাস সানিয়া',
+          'Rajab': 'রজব',
+          'Shaban': 'শাবান',
+          'Ramadan': 'রমজান',
+          'Shawwal': 'শাওয়াল',
+          'Dhul_Qadah': 'জিলকদ',
+          'Dhul_Hijjah': 'জিলহজ্জ',
+        },
       };
 }

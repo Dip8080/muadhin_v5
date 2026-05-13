@@ -1163,12 +1163,40 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                                           child: Text('Turkish'),
                                         ),
                                       ),
+                                      SizedBox(
+                                        width: 1.w,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.updateLocale(Locale('bn'));
+                                          wallpaperController
+                                              .changeLanguage('bn');
+                                          audioController.isHadia.value = true;
+                                          controllerTwo.selectedLanguage.value =
+                                              'bn';
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 1.w),
+                                          decoration: BoxDecoration(
+                                            color: Colors.blueAccent
+                                                .withOpacity(0.1),
+                                            border: Border.all(
+                                              color: Colors.white,
+                                              width: .4,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Text('Bangla'),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
                               )
                             : SizedBox(),
-                       
+
                         SettingsTile(
                             icon: Icons.volume_up,
                             title: 'adhan'.tr,
@@ -1195,7 +1223,6 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                                           margin: EdgeInsets.symmetric(
                                               horizontal: 1.5.w,
                                               vertical: 00.w),
-                                          
                                           child: ListView.builder(
                                             itemCount: audioController
                                                 .muajjinName.length,
