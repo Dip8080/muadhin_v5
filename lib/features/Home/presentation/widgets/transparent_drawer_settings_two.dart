@@ -1163,34 +1163,34 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                                           child: Text('Turkish'),
                                         ),
                                       ),
-                                      SizedBox(
-                                        width: 1.w,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Get.updateLocale(Locale('bn'));
-                                          wallpaperController
-                                              .changeLanguage('bn');
-                                          audioController.isHadia.value = true;
-                                          controllerTwo.selectedLanguage.value =
-                                              'bn';
-                                        },
-                                        child: Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 1.w),
-                                          decoration: BoxDecoration(
-                                            color: Colors.blueAccent
-                                                .withOpacity(0.1),
-                                            border: Border.all(
-                                              color: Colors.white,
-                                              width: .4,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          child: Text('Bangla'),
-                                        ),
-                                      ),
+                                      // SizedBox(
+                                      //   width: 1.w,
+                                      // ),
+                                      // GestureDetector(
+                                      //   onTap: () {
+                                      //     Get.updateLocale(Locale('bn'));
+                                      //     wallpaperController
+                                      //         .changeLanguage('bn');
+                                      //     audioController.isHadia.value = true;
+                                      //     controllerTwo.selectedLanguage.value =
+                                      //         'bn';
+                                      //   },
+                                      //   child: Container(
+                                      //     padding: EdgeInsets.symmetric(
+                                      //         horizontal: 1.w),
+                                      //     decoration: BoxDecoration(
+                                      //       color: Colors.blueAccent
+                                      //           .withOpacity(0.1),
+                                      //       border: Border.all(
+                                      //         color: Colors.white,
+                                      //         width: .4,
+                                      //       ),
+                                      //       borderRadius:
+                                      //           BorderRadius.circular(10),
+                                      //     ),
+                                      //     child: Text('Bangla'),
+                                      //   ),
+                                      // ),
                                     ],
                                   ),
                                 ),
@@ -1405,8 +1405,8 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                         SettingsTile(
                           icon: Icons.restart_alt,
                           // title: 'bluetooth'.tr,
-                          title: 'restart_muadhin'.tr,
-                          subtitle: 'click_restart_muadhin'.tr,
+                          title: 'reload_muadhin'.tr,
+                          subtitle: 'click_reload_muadhin'.tr,
                           onTap: () async {
                             final ctx = context;
 

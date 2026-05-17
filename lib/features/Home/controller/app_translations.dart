@@ -4,8 +4,8 @@ class AppTranslations extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en': {
-          "restart_muadhin": "Restart Muadhin",
-          "click_restart_muadhin": "Click to restart Muadhin screen",
+          "reload_muadhin": "Reload Muadhin",
+          "click_reload_muadhin": "Click To Reload Muadhin screen",
 
           'adhan': 'Adhan',
           'bluetooth': 'Bluetooth',
@@ -102,9 +102,8 @@ class AppTranslations extends Translations {
           "selectLanguage": "Select language",
         },
         'nl': {
-          "restart_muadhin": "Muadhin opnieuw starten",
-          "click_restart_muadhin":
-              "Klik om het Muadhin-scherm opnieuw te starten",
+          "reload_muadhin": "Muadhin opnieuw laden",
+          "click_reload_muadhin": "Klik om het Muadhin-scherm opnieuw te laden",
 
           'adhan': 'Adhan',
           'bluetooth': 'Bluetooth',
@@ -195,8 +194,8 @@ class AppTranslations extends Translations {
               "Tijdzone instellen & gebedstijden aanpassen"
         },
         'fr': {
-          "restart_muadhin": "Redémarrer le Muadhin",
-          "click_restart_muadhin": "Cliquez pour redémarrer l'écran du Muadhin",
+          "reload_muadhin": "Recharger Muadhin",
+          "click_reload_muadhin": "Cliquez pour recharger l'écran Muadhin",
 
           'adhan': 'Adhan',
           'bluetooth': 'Bluetooth',
@@ -296,9 +295,9 @@ SubhanAllahi wa bihamdi, SubhanAllahi al-azeem
               "Définir le fuseau horaire et ajuster les heures de prière"
         },
         'de': {
-          "restart_muadhin": "Muadhin neu starten",
-          "click_restart_muadhin":
-              "Klicken Sie, um den Muadhin-Bildschirm neu zu starten",
+          "reload_muadhin": "Muadhin neu laden",
+          "click_reload_muadhin":
+              "Klicken Sie, um den Muadhin-Bildschirm neu zu laden",
 
           'adhan': 'Adhan',
           'bluetooth': 'Bluetooth',
@@ -397,8 +396,8 @@ SubhanAllahi wa bihamdi, SubhanAllahi al-azeem
         },
         // arabic
         'ar': {
-          "restart_muadhin": "إعادة تشغيل المؤذن",
-          "click_restart_muadhin": "اضغط لإعادة تشغيل شاشة المؤذن",
+          "reload_muadhin": "إعادة تحميل المؤذن",
+          "click_reload_muadhin": "اضغط لإعادة تحميل شاشة المؤذن",
 
           'adhan': 'الأذان',
           'bluetooth': 'بلوتوث',
@@ -651,9 +650,9 @@ SubhanAllahi wa bihamdi, SubhanAllahi al-azeem
 
         // Turkish
         'tr': {
-          "restart_muadhin": "Muadhin’i Yeniden Başlat",
-          "click_restart_muadhin":
-              "Muadhin ekranını yeniden başlatmak için tıklayın",
+          "reload_muadhin": "Muadhin’i Yeniden Yükle",
+          "click_reload_muadhin":
+              "Muadhin ekranını yeniden yüklemek için tıklayın",
 
           'adhan': 'Ezan',
           'bluetooth': 'Bluetooth',
