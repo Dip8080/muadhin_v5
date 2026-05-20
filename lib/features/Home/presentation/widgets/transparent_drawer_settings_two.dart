@@ -356,14 +356,11 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                                                                   // ),
                                                                   Image.asset(
                                                                     'assets/icons/clock.png',
-                                                                    width:
-                                                                        2.3.w,
-                                                                    height:
-                                                                        2.3.w,
+                                                                    width: 3.w,
+                                                                    height: 3.w,
                                                                     // color: Colors
                                                                     //     .white,
-                                                                    color: Colors
-                                                                        .blueAccent,
+                                                                    color: Colors.blueAccent,
                                                                   ),
                                                                   SizedBox(
                                                                     width: 10,
@@ -387,9 +384,13 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                                                                   // Text('time'.tr),
                                                                   SizedBox(
                                                                     width:
-                                                                        2.5.w,
+                                                                        4.5.w,
                                                                   ),
                                                                   Text(
+                                                                    // '${clockController.getCurrentTimeInSelectedTimeZone()}'),
+                                                                    // '${clockController.getCurrentTimeInSelectedTimeZone()}'),
+                                                                    // '${clockController.getCurrentTimeInSelectedTimeZone()}'),
+                                                                    // '${clockController.getCurrentTimeInSelectedTimeZone()}'),
                                                                     // '${clockController.getCurrentTimeInSelectedTimeZone()}'),
                                                                     '${controllerTwo.getCurrentTimeInSelectedTimeZone()}',
                                                                     style: TextStyle(
@@ -436,21 +437,10 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                                                                     MainAxisAlignment
                                                                         .start,
                                                                 children: <Widget>[
-                                                                  // Icon(
-                                                                  //   Icons
-                                                                  //       .calendar_month_outlined,
-                                                                  //   size: 3.5.w,
-                                                                  //   color: Colors
-                                                                  //       .blueAccent,
-                                                                  // ),
-                                                                  Image.asset(
-                                                                    'assets/icons/calendar.png',
-                                                                    width:
-                                                                        2.3.w,
-                                                                    height:
-                                                                        2.3.w,
-                                                                    // color: Colors
-                                                                    //     .white,
+                                                                  Icon(
+                                                                    Icons
+                                                                        .calendar_month_outlined,
+                                                                    size: 3.5.w,
                                                                     color: Colors
                                                                         .blueAccent,
                                                                   ),
@@ -567,12 +557,9 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                                                       children: [
                                                         Row(
                                                           children: [
-                                                            Image.asset(
-                                                              'assets/icons/earth.png',
-                                                              width: 3.w,
-                                                              height: 3.w,
-                                                              // color: Colors
-                                                              //     .white,
+                                                            Icon(
+                                                              Icons.public,
+                                                              size: 4.w,
                                                               color: Colors
                                                                   .blueAccent,
                                                             ),
@@ -751,12 +738,10 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                                                       children: [
                                                         Row(
                                                           children: [
-                                                            Image.asset(
-                                                              'assets/icons/state.png',
-                                                              width: 3.w,
-                                                              height: 3.w,
-                                                              // color: Colors
-                                                              //     .white,
+                                                            Icon(
+                                                              Icons
+                                                                  .location_city,
+                                                              size: 4.w,
                                                               color: Colors
                                                                   .blueAccent,
                                                             ),
@@ -904,51 +889,105 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 1.w, vertical: 1.h),
                                           margin: EdgeInsets.symmetric(
-                                              vertical: .5.h),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                                              vertical: 1.h),
+                                          child: Column(
                                             children: [
-                                              // Prayer name
-                                              DynamicTextWidget(
-                                                  text:
-                                                      '${key.toString().capitalizeFirst}',
-                                                  fontSize: 2),
-
-                                              // Minus and Plus buttons
                                               Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.spaceBetween,
                                                 children: [
-                                                  IconButton(
-                                                    icon: Icon(
-                                                        Icons
-                                                            .remove_circle_outline,
-                                                        color: Colors.white),
-                                                    onPressed: () {
-                                                      controllerTwo
-                                                          .decreasePrayerTime(key
-                                                              .toString()
-                                                              .toLowerCase());
-                                                      // controllerTwo.adjustPrayerTime(
-                                                      //      key, -1
-                                                      //     ); // decrease 1 min
-                                                    },
+                                                  // Prayer name
+                                                  Row(
+                                                    children: [
+                                                      Obx(() => IconButton(
+                                                            padding: EdgeInsets.zero,
+                                                            constraints: BoxConstraints(),
+                                                            icon: Icon(
+                                                              (controllerTwo.prayerMuteStatus[key.toLowerCase()] ?? false)
+                                                                  ? Icons.volume_off
+                                                                  : Icons.volume_up,
+                                                              color: (controllerTwo.prayerMuteStatus[key.toLowerCase()] ?? false)
+                                                                  ? Colors.red
+                                                                  : Colors.white,
+                                                              size: 20,
+                                                            ),
+                                                            onPressed: () {
+                                                              controllerTwo.togglePrayerMute(key);
+                                                            },
+                                                          )),
+                                                      SizedBox(width: 8),
+                                                      DynamicTextWidget(
+                                                          text:
+                                                              '${key.toString().capitalizeFirst}',
+                                                          fontSize: 2),
+                                                    ],
                                                   ),
-                                                  IconButton(
-                                                    icon: Icon(
-                                                        Icons
-                                                            .add_circle_outline,
-                                                        color: Colors.white),
-                                                    onPressed: () {
-                                                      controllerTwo
-                                                          .increasePrayerTime(key
-                                                              .toString()
-                                                              .toLowerCase());
-                                                      // controllerTwo.adjustPrayerTime(
-                                                      //     key,
-                                                      //     1); // increase 1 min
-                                                    },
+
+                                                  // Minus and Plus buttons
+                                                  Row(
+                                                    children: [
+                                                      IconButton(
+                                                        icon: Icon(
+                                                            Icons
+                                                                .remove_circle_outline,
+                                                            color: Colors.white),
+                                                        onPressed: () {
+                                                          controllerTwo
+                                                              .decreasePrayerTime(key
+                                                                  .toString()
+                                                                  .toLowerCase());
+                                                        },
+                                                      ),
+                                                      IconButton(
+                                                        icon: Icon(
+                                                            Icons
+                                                                .add_circle_outline,
+                                                            color: Colors.white),
+                                                        onPressed: () {
+                                                          controllerTwo
+                                                              .increasePrayerTime(key
+                                                                  .toString()
+                                                                  .toLowerCase());
+                                                        },
+                                                      ),
+                                                    ],
                                                   ),
                                                 ],
+                                              ),
+                                              Divider(color: Colors.white12, height: 1),
+                                              Padding(
+                                                padding: EdgeInsets.only(top: 8.0),
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      '${'Muadhin'.tr}: ',
+                                                      style: TextStyle(color: Colors.white70, fontSize: 1.8.w),
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        _showMuadhinSelector(context, key);
+                                                      },
+                                                      child: Container(
+                                                        padding: EdgeInsets.symmetric(horizontal: 1.2.w, vertical: 0.5.h),
+                                                        decoration: BoxDecoration(
+                                                          color: Colors.white.withOpacity(0.05),
+                                                          border: Border.all(color: Colors.white24),
+                                                          borderRadius: BorderRadius.circular(5),
+                                                        ),
+                                                        child: Obx(() {
+                                                          String currentVoice = controllerTwo.prayerAdhanVoices[key.toLowerCase()] ?? '';
+                                                          int index = audioController.adhanUrl.indexOf(currentVoice);
+                                                          String name = index != -1 ? audioController.muajjinName[index] : 'Select';
+                                                          return Text(
+                                                            name,
+                                                            style: TextStyle(color: Colors.white, fontSize: 1.6.w),
+                                                          );
+                                                        }),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -1135,68 +1174,29 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                                           child: Text('German'),
                                         ),
                                       ),
-                                      SizedBox(
-                                        width: 1.w,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Get.updateLocale(Locale('tr'));
-                                          wallpaperController
-                                              .changeLanguage('tr');
-                                          audioController.isHadia.value = true;
-                                          controllerTwo.selectedLanguage.value =
-                                              'tr';
-                                        },
-                                        child: Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 1.w),
-                                          decoration: BoxDecoration(
-                                            color: Colors.blueAccent
-                                                .withOpacity(0.1),
-                                            border: Border.all(
-                                              color: Colors.white,
-                                              width: .4,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          child: Text('Turkish'),
-                                        ),
-                                      ),
-                                      // SizedBox(
-                                      //   width: 1.w,
-                                      // ),
-                                      // GestureDetector(
-                                      //   onTap: () {
-                                      //     Get.updateLocale(Locale('bn'));
-                                      //     wallpaperController
-                                      //         .changeLanguage('bn');
-                                      //     audioController.isHadia.value = true;
-                                      //     controllerTwo.selectedLanguage.value =
-                                      //         'bn';
-                                      //   },
-                                      //   child: Container(
-                                      //     padding: EdgeInsets.symmetric(
-                                      //         horizontal: 1.w),
-                                      //     decoration: BoxDecoration(
-                                      //       color: Colors.blueAccent
-                                      //           .withOpacity(0.1),
-                                      //       border: Border.all(
-                                      //         color: Colors.white,
-                                      //         width: .4,
-                                      //       ),
-                                      //       borderRadius:
-                                      //           BorderRadius.circular(10),
-                                      //     ),
-                                      //     child: Text('Bangla'),
-                                      //   ),
-                                      // ),
                                     ],
                                   ),
                                 ),
                               )
                             : SizedBox(),
-
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     brightnessController.setSettingsPrest('Adhan');
+                        //     brightnessController.toggleSection('adhan');
+                        //   },
+                        //   child: Text(
+                        //     // 'language'.tr,
+                        //     'Adhan',
+                        //     style: Theme.of(context)
+                        //         .textTheme
+                        //         .bodySmall!
+                        //         .copyWith(
+                        //             fontSize: 2.5.w,
+                        //             color: Colors.white,
+                        //             decoration: TextDecoration.underline,
+                        //             decorationColor: Colors.white24),
+                        //   ),
+                        // ),
                         SettingsTile(
                             icon: Icons.volume_up,
                             title: 'adhan'.tr,
@@ -1223,6 +1223,18 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                                           margin: EdgeInsets.symmetric(
                                               horizontal: 1.5.w,
                                               vertical: 00.w),
+                                          // decoration: BoxDecoration(
+                                          //     color: Colors.white30),
+                                          // decoration: BoxDecoration(
+                                          //   color: Colors.blueAccent
+                                          //       .withOpacity(0.1),
+                                          //   border: Border.all(
+                                          //     color: Colors.white,
+                                          //     width: .4,
+                                          //   ),
+                                          //   borderRadius:
+                                          //       BorderRadius.circular(10),
+                                          // ),
                                           child: ListView.builder(
                                             itemCount: audioController
                                                 .muajjinName.length,
@@ -1405,8 +1417,8 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                         SettingsTile(
                           icon: Icons.restart_alt,
                           // title: 'bluetooth'.tr,
-                          title: 'reload_muadhin'.tr,
-                          subtitle: 'click_reload_muadhin'.tr,
+                          title: 'Restart Muadhin',
+                          subtitle: 'click to restart muadhin screen'.tr,
                           onTap: () async {
                             final ctx = context;
 
@@ -1428,6 +1440,31 @@ class Transparent_drawer_settings_two extends StatelessWidget {
         ),
       );
     });
+  }
+
+  void _showMuadhinSelector(BuildContext context, String prayerKey) {
+    Get.dialog(
+      AlertDialog(
+        backgroundColor: Colors.black.withOpacity(0.8),
+        title: Text('Select Muadhin for ${prayerKey.capitalizeFirst}', style: TextStyle(color: Colors.white, fontSize: 2.w)),
+        content: Container(
+          width: double.maxFinite,
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: audioController.muajjinName.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(audioController.muajjinName[index], style: TextStyle(color: Colors.white, fontSize: 2.w)),
+                onTap: () {
+                  controllerTwo.setPrayerAdhan(prayerKey, audioController.adhanUrl[index]);
+                  Get.back();
+                },
+              );
+            },
+          ),
+        ),
+      ),
+    );
   }
 
   Container diamond_container(int index) {

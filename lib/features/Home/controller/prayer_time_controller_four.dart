@@ -90,6 +90,22 @@ class PrayerTimeControllerFour extends GetxController {
   final adhanVoice =
       'https://firebasestorage.googleapis.com/v0/b/muadhin-a26a0.firebasestorage.app/o/adhan_audio%2Fmuadhin1.mp3?alt=media&token=8465b95c-b29f-4e7f-ba06-00ceab6dc51e'
           .obs;
+
+  final RxMap<String, bool> prayerMuteStatus = <String, bool>{
+    "fajr": false,
+    "dhuhr": false,
+    "asr": false,
+    "maghrib": false,
+    "isha": false,
+  }.obs;
+
+  final RxMap<String, String> prayerAdhanVoices = <String, String>{
+    "fajr": 'https://firebasestorage.googleapis.com/v0/b/muadhin-a26a0.firebasestorage.app/o/adhan_audio%2Fmuadhin1.mp3?alt=media&token=8465b95c-b29f-4e7f-ba06-00ceab6dc51e',
+    "dhuhr": 'https://firebasestorage.googleapis.com/v0/b/muadhin-a26a0.firebasestorage.app/o/adhan_audio%2Fmuadhin1.mp3?alt=media&token=8465b95c-b29f-4e7f-ba06-00ceab6dc51e',
+    "asr": 'https://firebasestorage.googleapis.com/v0/b/muadhin-a26a0.firebasestorage.app/o/adhan_audio%2Fmuadhin1.mp3?alt=media&token=8465b95c-b29f-4e7f-ba06-00ceab6dc51e',
+    "maghrib": 'https://firebasestorage.googleapis.com/v0/b/muadhin-a26a0.firebasestorage.app/o/adhan_audio%2Fmuadhin1.mp3?alt=media&token=8465b95c-b29f-4e7f-ba06-00ceab6dc51e',
+    "isha": 'https://firebasestorage.googleapis.com/v0/b/muadhin-a26a0.firebasestorage.app/o/adhan_audio%2Fmuadhin1.mp3?alt=media&token=8465b95c-b29f-4e7f-ba06-00ceab6dc51e',
+  }.obs;
   final RxList<String> states = <String>[
     'Gouda',
     'Amsterdam',
@@ -395,8 +411,25 @@ class PrayerTimeControllerFour extends GetxController {
     }
   }
 
+  void togglePrayerMute(String prayer) {
+    String p = prayer.toLowerCase();
+    prayerMuteStatus[p] = !(prayerMuteStatus[p] ?? false);
+    update();
+  }
+
+  void setPrayerAdhan(String prayer, String url) {
+    prayerAdhanVoices[prayer.toLowerCase()] = url;
+    update();
+  }
+
   Future<void> changeMuadhin(String url) async {
     adhanVoice.value = url;
+    // Also update all prayer voices to the selected one if we want a global change
+    // but typically the user might want a global default.
+    // For now, let's keep it global as well.
+    for (var key in prayerAdhanVoices.keys) {
+      prayerAdhanVoices[key] = url;
+    }
 
     if (_playerReady) {
       await _player.stop();
@@ -429,15 +462,15 @@ class PrayerTimeControllerFour extends GetxController {
           cleaned[key.toLowerCase()] = raw;
         }
 
-        prayerTimes.assignAll(cleaned);
+        // prayerTimes.assignAll(cleaned);
 
-        // prayerTimes.assignAll({
-        //   "fajr": "07:10",
-        //   "dhuhr": "07:22",
-        //   "asr": "09:03",
-        //   "maghrib": "07:31",
-        //   "isha": "07:32",
-        // });
+        prayerTimes.assignAll({
+          "fajr": "07:17",
+          "dhuhr": "07:19",
+          "asr": "07:21",
+          "maghrib": "07:23",
+          "isha": "07:25",
+        });
         print(
             'this is prayer time is the prayertime controller four ${prayerTimes}');
         updatePrayerStatus();
@@ -736,8 +769,12 @@ class PrayerTimeControllerFour extends GetxController {
         }
       });
 
-      await _player.setUrl(adhanVoice.value);
-      await _player.setVolume(isMuted.value ? 0.0 : 1.0);
+      String currentPrayer = nextPrayer.value.toLowerCase();
+      String voiceUrl = prayerAdhanVoices[currentPrayer] ?? adhanVoice.value;
+      bool currentMuted = isMuted.value || (prayerMuteStatus[currentPrayer] ?? false);
+
+      await _player.setUrl(voiceUrl);
+      await _player.setVolume(currentMuted ? 0.0 : 1.0);
       await _player.play();
     } catch (e) {
       print("Error playing Adhan: $e");
