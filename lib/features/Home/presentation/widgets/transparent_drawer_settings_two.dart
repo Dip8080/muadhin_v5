@@ -1445,26 +1445,91 @@ class Transparent_drawer_settings_two extends StatelessWidget {
   void _showMuadhinSelector(BuildContext context, String prayerKey) {
     Get.dialog(
       AlertDialog(
-        backgroundColor: Colors.black.withOpacity(0.8),
-        title: Text('Select Muadhin for ${prayerKey.capitalizeFirst}', style: TextStyle(color: Colors.white, fontSize: 2.w)),
+        backgroundColor: Colors.black.withOpacity(0.95),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: BorderSide(color: Colors.white24, width: 1),
+        ),
+        title: Text(
+          'Select Muadhin for ${prayerKey.capitalizeFirst}',
+          style: TextStyle(color: Colors.white, fontSize: 2.w, fontWeight: FontWeight.bold),
+        ),
         content: Container(
           width: double.maxFinite,
           child: ListView.builder(
             shrinkWrap: true,
             itemCount: audioController.muajjinName.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(audioController.muajjinName[index], style: TextStyle(color: Colors.white, fontSize: 2.w)),
-                onTap: () {
-                  controllerTwo.setPrayerAdhan(prayerKey, audioController.adhanUrl[index]);
-                  Get.back();
-                },
-              );
+              return Obx(() {
+                bool isThisAdhanPlaying = audioController.isPlaying.value &&
+                    (audioController.adhanIndex.value == index);
+
+                String currentVoice = controllerTwo.prayerAdhanVoices[prayerKey.toLowerCase()] ?? '';
+                bool isSelected = currentVoice == audioController.adhanUrl[index];
+
+                return Container(
+                  margin: EdgeInsets.symmetric(vertical: 0.5.h),
+                  decoration: BoxDecoration(
+                    color: isSelected ? Colors.white.withOpacity(0.08) : Colors.transparent,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: isSelected ? Colors.white38 : Colors.transparent,
+                      width: 1,
+                    ),
+                  ),
+                  child: ListTile(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 0.5.h),
+                    leading: IconButton(
+                      icon: Icon(
+                        isThisAdhanPlaying
+                            ? Icons.pause_circle_filled
+                            : Icons.play_circle_filled,
+                        color: isThisAdhanPlaying ? Colors.amber : Colors.white70,
+                        size: 26,
+                      ),
+                      onPressed: () {
+                        if (isThisAdhanPlaying) {
+                          audioController.pauseAudio();
+                        } else {
+                          audioController.playAdhan(index);
+                          audioController.adhanIndex.value = index;
+                        }
+                      },
+                    ),
+                    title: Text(
+                      audioController.muajjinName[index],
+                      style: TextStyle(
+                        color: isSelected ? Colors.amber : Colors.white,
+                        fontSize: 1.8.w,
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      ),
+                    ),
+                    trailing: isSelected
+                        ? Icon(Icons.check_circle, color: Colors.greenAccent, size: 22)
+                        : Icon(Icons.circle_outlined, color: Colors.white24, size: 22),
+                    onTap: () {
+                      controllerTwo.setPrayerAdhan(prayerKey, audioController.adhanUrl[index]);
+                      Get.back();
+                    },
+                  ),
+                );
+              });
             },
           ),
         ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text(
+              'Close',
+              style: TextStyle(color: Colors.white70, fontSize: 1.6.w),
+            ),
+          ),
+        ],
       ),
-    );
+    ).then((_) {
+      audioController.stopAudio();
+    });
   }
 
   Container diamond_container(int index) {
@@ -1645,3 +1710,5 @@ class Transparent_drawer_settings_two extends StatelessWidget {
     });
   }
 }
+
+
