@@ -22,6 +22,9 @@ class _VideoSplashScreenState extends State<VideoSplashScreen> {
       });
 
     // Navigate to the next screen after the video ends
+    // Navigate to the next screen after the video ends
+    // Navigate to the next screen after the video ends
+    // Navigate to the next screen after the video ends
     _controller.addListener(() {
       if (_controller.value.position == _controller.value.duration) {
         if (mounted) {
