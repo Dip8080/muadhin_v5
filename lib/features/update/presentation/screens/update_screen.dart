@@ -10,56 +10,248 @@ class UpdateScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: Center(
-        child: Obx(() {
-          if (!controller.isUpdateAvailable.value) {
-            return const SizedBox(); // continue app
-          }
-
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.system_update, size: 80, color: Colors.white),
-              const SizedBox(height: 20),
-              const Text(
-                "Update Available",
-                style: TextStyle(color: Colors.white, fontSize: 22),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                "Latest version: ${controller.latestVersion.value}",
-                style: const TextStyle(color: Colors.grey),
-              ),
-              const SizedBox(height: 30),
-
-              // ElevatedButton(
-              //   onPressed: controller.openPlayStore,
-              //   child: const Text("Update via Play Store"),
-              // ),
-
-              const SizedBox(height: 10),
-
-              SizedBox(
-                width: 40.w,
-                child: ElevatedButton(
-                  onPressed: controller.downloadApk,
-                  child: const Text("Download APK"),
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              if (!controller.isForceUpdate.value)
-                TextButton(
-                  onPressed: () {
-                    Get.to(() => AlermThree());
-                  },
-                  child: const Text("Skip"),
-                ),
+      body: Container(
+        width: 100.w,
+        height: 100.h,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF0F172A), // Slate 900
+              Color(0xFF020617), // Slate 950
             ],
-          );
-        }),
+          ),
+        ),
+        child: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5.w),
+                child: Container(
+                  width: 85.w,
+                  padding: EdgeInsets.all(6.w),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.05),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.12),
+                      width: 1.5,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.5),
+                        blurRadius: 30,
+                        spreadRadius: 5,
+                      ),
+                    ],
+                  ),
+                  child: Obx(() {
+                    final isDownloading = controller.isDownloading.value;
+                    final progress = controller.downloadProgress.value;
+                    final status = controller.downloadStatus.value;
+                    final isForce = controller.isForceUpdate.value;
+
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Premium Glow Icon
+                        Container(
+                          padding: EdgeInsets.all(4.w),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF8ED6D8).withOpacity(0.1),
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: const Color(0xFF8ED6D8).withOpacity(0.2),
+                              width: 2,
+                            ),
+                          ),
+                          child: Icon(
+                            isDownloading ? Icons.cloud_download : Icons.system_update_rounded,
+                            size: 12.w,
+                            color: const Color(0xFF8ED6D8),
+                          ),
+                        ),
+                        SizedBox(height: 5.h),
+
+                        // Title
+                        Text(
+                          isDownloading ? "Updating System" : "New Update Available",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 5.w,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                        SizedBox(height: 1.5.h),
+
+                        // Version details
+                        Text(
+                          "Latest Version: ${controller.latestVersion.value}",
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 3.5.w,
+                          ),
+                        ),
+                        SizedBox(height: 4.h),
+
+                        // Main Content Card (Details / Progress)
+                        if (!isDownloading) ...[
+                          // Changelog placeholder or message
+                          Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.all(4.w),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.white.withOpacity(0.05),
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "What's New:",
+                                  style: TextStyle(
+                                    color: const Color(0xFFE6EFA6),
+                                    fontSize: 3.8.w,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(height: 1.h),
+                                Text(
+                                  "• Performance optimizations & stability fixes.\n• Seamless background APK update handling.\n• Audio playback improvements.",
+                                  style: TextStyle(
+                                    color: Colors.white60,
+                                    fontSize: 3.2.w,
+                                    height: 1.6,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 5.h),
+
+                          // Download Button
+                          GestureDetector(
+                            onTap: controller.startInAppUpdate,
+                            child: Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.symmetric(vertical: 2.2.h),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                gradient: const LinearGradient(
+                                  colors: [
+                                    Color(0xFFE6EFA6),
+                                    Color(0xFF8ED6D8),
+                                  ],
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(0xFF8ED6D8).withOpacity(0.3),
+                                    blurRadius: 12,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "Update Now",
+                                  style: TextStyle(
+                                    fontSize: 4.w,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ] else ...[
+                          // Live Progress View
+                          Column(
+                            children: [
+                              // Progress bar
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Container(
+                                  height: 2.h,
+                                  width: double.infinity,
+                                  color: Colors.white.withOpacity(0.08),
+                                  child: Stack(
+                                    children: [
+                                      LayoutBuilder(
+                                        builder: (context, constraints) {
+                                          return AnimatedContainer(
+                                            duration: const Duration(milliseconds: 200),
+                                            width: constraints.maxWidth * progress,
+                                            height: double.infinity,
+                                            decoration: const BoxDecoration(
+                                              gradient: LinearGradient(
+                                                colors: [
+                                                  Color(0xFFE6EFA6),
+                                                  Color(0xFF8ED6D8),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 2.h),
+
+                              // Status text
+                              Text(
+                                status,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 3.5.w,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              SizedBox(height: 1.h),
+                              
+                              Text(
+                                "Please do not close or exit the application.",
+                                style: TextStyle(
+                                  color: Colors.white38,
+                                  fontSize: 2.8.w,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 4.h),
+                        ],
+
+                        // Skip / Secondary actions
+                        if (!isDownloading && !isForce) ...[
+                          SizedBox(height: 1.h),
+                          TextButton(
+                            onPressed: () {
+                              Get.offAll(() => const AlermThree());
+                            },
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.white38,
+                            ),
+                            child: Text(
+                              "Remind Me Later",
+                              style: TextStyle(fontSize: 3.5.w),
+                            ),
+                          ),
+                        ],
+                      ],
+                    );
+                  }),
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

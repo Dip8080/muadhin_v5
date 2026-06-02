@@ -73,21 +73,25 @@ class Muaddin extends StatelessWidget {
           fallbackLocale: const Locale('en'),
           initialBinding: InitialBinding(),
 
-          // home: GetX<UpdateController>(
-          //   builder: (updateController) {
-          //     if (updateController.latestVersion.value.isEmpty) {
-          //       return const Scaffold(
-          //         body: Center(child: CircularProgressIndicator()),
-          //       );
-          //     }
+          home: GetX<UpdateController>(
+            builder: (updateController) {
+              if (updateController.latestVersion.value.isEmpty) {
+                return const Scaffold(
+                  backgroundColor: Colors.black,
+                  body: Center(
+                    child: CircularProgressIndicator(
+                      color: Color(0xFF8ED6D8),
+                    ),
+                  ),
+                );
+              }
 
-          //     if (updateController.isUpdateAvailable.value) {
-          //       return UpdateScreen();
-          //     }
-          //     return AlermThree();
-          //   },
-          // ),
-          home: AlermThree(),
+              if (updateController.isUpdateAvailable.value) {
+                return UpdateScreen();
+              }
+              return const AlermThree();
+            },
+          ),
         );
       },
     );
