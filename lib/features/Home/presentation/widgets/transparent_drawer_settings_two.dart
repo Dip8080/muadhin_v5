@@ -1681,6 +1681,8 @@ class Transparent_drawer_settings_two extends StatelessWidget {
             onChanged: (value) {
               // await _audioPlayer.seek(Duration(seconds: value.toInt()));
               // return audioController.seekAudio(value);
+              // return audioController.seekAudio(value);
+              // return audioController.seekAudio(value);
               audioController.audioPlayer
                   .seek(Duration(seconds: value.toInt()));
             },
