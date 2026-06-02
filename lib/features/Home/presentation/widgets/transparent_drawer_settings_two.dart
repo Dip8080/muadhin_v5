@@ -11,6 +11,7 @@ import 'package:muaddin/features/Home/controller/brightness_controller.dart';
 import 'package:muaddin/features/Home/controller/prayer_time_controller_four.dart';
 import 'package:muaddin/features/Home/controller/wallpaper_controller.dart';
 import 'package:muaddin/features/player_two/controller/audio_controller.dart';
+import 'package:muaddin/features/update/controller/update_controller.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:app_settings/app_settings.dart';
@@ -22,11 +23,14 @@ class Transparent_drawer_settings_two extends StatelessWidget {
   Transparent_drawer_settings_two({required this.context});
   final AudioController audioController = Get.find();
   final BrightnessController brightnessController = Get.find();
+    final UpdateController updateController = Get.find();
+
   // final ClockController clockController = Get.find();
   final WallpaperController wallpaperController = Get.find();
   // final PrayerTimeController prayerTimeController = Get.find();
   // final PrayerTimeControllerThree controller = Get.find();
   final PrayerTimeControllerFour controllerTwo = Get.find();
+  final RxBool _isAboutExpanded = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -1430,6 +1434,94 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                             });
                           },
                         ),
+                        SettingsTile(
+                          icon: Icons.info_outline,
+                          title: _getLocalText('about_title'),
+                          subtitle: _getLocalText('about_subtitle'),
+                          onTap: () {
+                            _isAboutExpanded.value = !_isAboutExpanded.value;
+                          },
+                        ),
+                        _isAboutExpanded.value
+                            ? Container(
+                                margin: const EdgeInsets.symmetric(vertical: 8),
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  color: Colors.blueAccent.withOpacity(0.08),
+                                  border: Border.all(
+                                    color: Colors.white24,
+                                    width: .5,
+                                  ),
+                                  borderRadius: BorderRadius.circular(18),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.info,
+                                          color: const Color.fromARGB(255, 167, 203, 255),
+                                          size: 3.w,
+                                        ),
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Muadhin',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 1.8.w,
+                                                  fontWeight: FontWeight.bold,
+                                                  letterSpacing: 1.2,
+                                                ),
+                                              ),
+                                              Text(
+                                                'Version ${updateController.latestVersion.toString()} (Build 1)',
+                                                style: TextStyle(
+                                                  color: Colors.white70,
+                                                  fontSize: 1.4.w,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Text(
+                                      _getLocalText('app_desc'),
+                                      style: TextStyle(
+                                        color: Colors.white.withOpacity(0.85),
+                                        fontSize: 1.4.w,
+                                        height: 1.4,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    const Divider(color: Colors.white24, height: 1),
+                                    const SizedBox(height: 12),
+                                    _buildInfoRow(Icons.check_circle_outline, _getLocalText('f1')),
+                                    _buildInfoRow(Icons.check_circle_outline, _getLocalText('f2')),
+                                    _buildInfoRow(Icons.check_circle_outline, _getLocalText('f3')),
+                                    _buildInfoRow(Icons.check_circle_outline, _getLocalText('f4')),
+                                    const SizedBox(height: 12),
+                                    const Divider(color: Colors.white24, height: 1),
+                                    const SizedBox(height: 12),
+                                    Center(
+                                      child: Text(
+                                        _getLocalText('copyright'),
+                                        style: TextStyle(
+                                          color: Colors.white38,
+                                          fontSize: 1.2.w,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : const SizedBox.shrink(),
                       ],
                     ),
                   )
@@ -1564,6 +1656,110 @@ class Transparent_drawer_settings_two extends StatelessWidget {
         icon,
         color: Colors.white,
         weight: 6,
+      ),
+    );
+  }
+
+  String _getLocalText(String key) {
+    final langCode = Get.locale?.languageCode ?? 'en';
+    final translations = {
+      'en': {
+        'about_title': 'About Muadhin',
+        'about_subtitle': 'App details, version, and info',
+        'app_desc': 'An elegant, transparent, and completely ad-free Islamic companion app designed to bring tranquility to your home with precise prayer times, high-quality Adhan sounds, and stunning dynamic wallpapers.',
+        'f1': 'Precision offline calculations',
+        'f2': 'Premium Adhan audio selectors',
+        'f3': 'Dynamic background wallpapers',
+        'f4': 'Privacy-first, 100% ad-free',
+        'copyright': '© 2026 Muadhin App. All rights reserved.',
+      },
+      'nl': {
+        'about_title': 'Over Muadhin',
+        'about_subtitle': 'App-details, versie en info',
+        'app_desc': 'Een elegante, transparante en volledig advertentievrije islamitische metgezel-app ontworpen om rust in uw huis te brengen met nauwkeurige gebedstijden, hoogwaardige Adhan-geluiden en prachtige dynamische achtergronden.',
+        'f1': 'Nauwkeurige offline berekeningen',
+        'f2': 'Premium Adhan-audioselectoren',
+        'f3': 'Dynamische achtergrondachtergronden',
+        'f4': 'Privacy eerst, 100% advertentievrij',
+        'copyright': '© 2026 Muadhin App. Alle rechten voorbehouden.',
+      },
+      'fr': {
+        'about_title': 'À propos de Muadhin',
+        'about_subtitle': 'Détails de l\'application, version et infos',
+        'app_desc': 'Une application compagnon islamique élégante, transparente et complètement sans publicité, conçue pour apporter la tranquillité dans votre maison avec des horaires de prière précis, des sons d\'Adhan de haute qualité et de superbes fonds d\'écran dynamiques.',
+        'f1': 'Calculs hors ligne de précision',
+        'f2': 'Sélecteurs audio d\'Adhan premium',
+        'f3': 'Fonds d\'écran dynamiques',
+        'f4': 'Confidentialité d\'abord, 100% sans publicité',
+        'copyright': '© 2026 Application Muadhin. Tous droits réservés.',
+      },
+      'de': {
+        'about_title': 'Über Muadhin',
+        'about_subtitle': 'App-Details, Version und Infos',
+        'app_desc': 'Eine elegante, transparente und völlig werbefreie islamische Begleiter-App, die entwickelt wurde, um mit präzisen Gebetszeiten, hochwertigen Adhan-Klängen und atemberaubenden dynamischen Hintergrundbildern Ruhe in Ihr Zuhause zu bringen.',
+        'f1': 'Präzise Offline-Berechnungen',
+        'f2': 'Premium-Adhan-Audioauswahl',
+        'f3': 'Dynamische Hintergrundbilder',
+        'f4': 'Privatsphäre zuerst, 100% werbefrei',
+        'copyright': '© 2026 Muadhin App. Alle Rechte vorbehalten.',
+      },
+      'ar': {
+        'about_title': 'حول المؤذن',
+        'about_subtitle': 'تفاصيل التطبيق، الإصدار والمعلومات',
+        'app_desc': 'تطبيق إسلامي أنيق، شفاف وخالٍ تمامًا من الإعلانات مصمم لإضفاء السكينة على منزلك مع مواقيت صلاة دقيقة، وأصوات أذان عالية الجودة، وخلفيات ديناميكية مذهلة.',
+        'f1': 'حسابات دقيقة بدون اتصال بالإنترنت',
+        'f2': 'محددات صوت أذان ممتازة',
+        'f3': 'خلفيات شاشة ديناميكية',
+        'f4': 'الخصوصية أولاً، خالي من الإعلانات 100%',
+        'copyright': '© 2026 تطبيق المؤذن. جميع الحقوق محفوظة.',
+      },
+      'tr': {
+        'about_title': 'Muadhin Hakkında',
+        'about_subtitle': 'Uygulama ayrıntıları, sürüm ve bilgiler',
+        'app_desc': 'Hassas namaz vakitleri, yüksek kaliteli Ezan sesleri ve çarpıcı dinamik duvar kağıtları ile evinize huzur getirmek için tasarlanmış şık, şeffaf ve tamamen reklamsız bir İslami yardımcı uygulama.',
+        'f1': 'Hassas çevrimdışı hesapmalar',
+        'f2': 'Premium Ezan ses seçicileri',
+        'f3': 'Dinamik arka plan duvar kağıtları',
+        'f4': 'Önce gizlilik, %100 reklamsız',
+        'copyright': '© 2026 Muadhin Uygulaması. Tüm hakları saklıdır.',
+      },
+      'bn': {
+        'about_title': 'মুয়াজ্জিন সম্পর্কে',
+        'about_subtitle': 'অ্যাপের বিবরণ, সংস্করণ এবং তথ্য',
+        'app_desc': 'একটি মার্জিত, স্বচ্ছ এবং সম্পূর্ণ বিজ্ঞাপন-মুক্ত ইসলামিক সহযোগী অ্যাপ যা আপনার ঘরে প্রশান্তি আনার জন্য তৈরি করা হয়েছে নিখুঁত নামাজের সময়, উচ্চ মানের আযানের শব্দ এবং চমৎকার গতিশীল ওয়ালপেপারের মাধ্যমে।',
+        'f1': 'নিখুঁত অফলাইন গণনা',
+        'f2': 'প্রিমিয়াম আযান অডিও নির্বাচক',
+        'f3': 'গতিশীল ব্যাকগ্রাউন্ড ওয়ালপেপার',
+        'f4': 'গোপনীয়তা প্রথম, ১০০% বিজ্ঞাপন-মুক্ত',
+        'copyright': '© ২০২৬ মুয়াজ্জিন অ্যাপ। সর্বস্বত্ব সংরক্ষিত।',
+      }
+    };
+
+    return translations[langCode]?[key] ?? translations['en']![key]!;
+  }
+
+  Widget _buildInfoRow(IconData icon, String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            icon,
+            color: const Color.fromARGB(255, 167, 203, 255),
+            size: 1.6.w,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.85),
+                fontSize: 1.3.w,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
