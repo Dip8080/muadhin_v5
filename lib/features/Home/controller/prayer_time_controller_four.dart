@@ -462,15 +462,15 @@ class PrayerTimeControllerFour extends GetxController {
           cleaned[key.toLowerCase()] = raw;
         }
 
-        // prayerTimes.assignAll(cleaned);
+        prayerTimes.assignAll(cleaned);
 
-        prayerTimes.assignAll({
-          "fajr": "07:17",
-          "dhuhr": "07:19",
-          "asr": "07:21",
-          "maghrib": "07:23",
-          "isha": "07:25",
-        });
+        // prayerTimes.assignAll({
+        //   "fajr": "17:55",
+        //   "dhuhr": "18:1",
+        //   "asr": "17:47",
+        //   "maghrib": "17:49",
+        //   "isha": "18:50",
+        // });
         print(
             'this is prayer time is the prayertime controller four ${prayerTimes}');
         updatePrayerStatus();
