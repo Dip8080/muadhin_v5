@@ -91,7 +91,7 @@ class UpdateScreen extends StatelessWidget {
                           "Latest Version: ${controller.latestVersion.value}",
                           style: TextStyle(
                             color: Colors.white70,
-                            fontSize: 1.5.w,
+                            fontSize: 1.8.w,
                           ),
                         ),
                         SizedBox(height: 1.h),
