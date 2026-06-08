@@ -102,3 +102,8 @@ class Muaddin extends StatelessWidget {
 
 // updated the way we listen to the update controller using GetX instead of Obx for better readability and performance.
 // updated the way we listen to the update controller using GetX instead of Obx for better readability and performance.
+// updated the way we listen to the update controller using GetX instead of Obx for better readability and performance.
+// updated the way we listen to the update controller using GetX instead of Obx for better readability and performance.
+// updated the way we listen to the update controller using GetX instead of Obx for better readability and performance.
+// updated the way we listen to the update controller using GetX instead of Obx for better readability and performance.
+// updated the way we listen to the update controller using GetX instead of Obx for better readability and performance.
