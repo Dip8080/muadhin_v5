@@ -68,33 +68,33 @@ class UpdateScreen extends StatelessWidget {
                           ),
                           child: Icon(
                             isDownloading ? Icons.cloud_download : Icons.system_update_rounded,
-                            size: 12.w,
+                            size: 6.w,
                             color: const Color(0xFF8ED6D8),
                           ),
                         ),
-                        SizedBox(height: 5.h),
+                        SizedBox(height: 2.h),
 
                         // Title
                         Text(
                           isDownloading ? "Updating System" : "New Update Available",
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 5.w,
+                            fontSize: 2.w,
                             fontWeight: FontWeight.bold,
                             letterSpacing: 0.5,
                           ),
                         ),
-                        SizedBox(height: 1.5.h),
+                        SizedBox(height: .5.h),
 
                         // Version details
                         Text(
                           "Latest Version: ${controller.latestVersion.value}",
                           style: TextStyle(
                             color: Colors.white70,
-                            fontSize: 3.5.w,
+                            fontSize: 1.5.w,
                           ),
                         ),
-                        SizedBox(height: 4.h),
+                        SizedBox(height: 1.h),
 
                         // Main Content Card (Details / Progress)
                         if (!isDownloading) ...[
@@ -116,7 +116,7 @@ class UpdateScreen extends StatelessWidget {
                                   "What's New:",
                                   style: TextStyle(
                                     color: const Color(0xFFE6EFA6),
-                                    fontSize: 3.8.w,
+                                    fontSize: 2.w,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -125,7 +125,7 @@ class UpdateScreen extends StatelessWidget {
                                   "• Performance optimizations & stability fixes.\n• Seamless background APK update handling.\n• Audio playback improvements.",
                                   style: TextStyle(
                                     color: Colors.white60,
-                                    fontSize: 3.2.w,
+                                    fontSize: 1.8.w,
                                     height: 1.6,
                                   ),
                                 ),
@@ -160,7 +160,7 @@ class UpdateScreen extends StatelessWidget {
                                 child: Text(
                                   "Update Now",
                                   style: TextStyle(
-                                    fontSize: 4.w,
+                                    fontSize: 2.w,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,
                                   ),
@@ -210,7 +210,7 @@ class UpdateScreen extends StatelessWidget {
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Colors.white70,
-                                  fontSize: 3.5.w,
+                                  fontSize: 2.w,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -220,12 +220,12 @@ class UpdateScreen extends StatelessWidget {
                                 "Please do not close or exit the application.",
                                 style: TextStyle(
                                   color: Colors.white38,
-                                  fontSize: 2.8.w,
+                                  fontSize: 2.w,
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(height: 4.h),
+                          SizedBox(height: 2.h),
                         ],
 
                         // Skip / Secondary actions
@@ -240,7 +240,7 @@ class UpdateScreen extends StatelessWidget {
                             ),
                             child: Text(
                               "Remind Me Later",
-                              style: TextStyle(fontSize: 3.5.w),
+                              style: TextStyle(fontSize: 1.7.w),
                             ),
                           ),
                         ],

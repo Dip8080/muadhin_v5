@@ -87,8 +87,8 @@ class Muaddin extends StatelessWidget {
               }
 
               if (updateController.isUpdateAvailable.value) {
-                // return UpdateScreen();
-                return AlermThree();
+                return UpdateScreen();
+                // return AlermThree();
               }
               return const AlermThree();
             },
