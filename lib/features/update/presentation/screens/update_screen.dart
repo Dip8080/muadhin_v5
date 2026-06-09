@@ -27,10 +27,11 @@ class UpdateScreen extends StatelessWidget {
           child: Center(
             child: SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5.w),
+                padding: EdgeInsets.symmetric(horizontal: 1.w),
                 child: Container(
-                  width: 85.w,
-                  padding: EdgeInsets.all(6.w),
+                  width: 90.w,
+                  height: 90.h,
+                  padding: EdgeInsets.all(2.w),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.05),
                     borderRadius: BorderRadius.circular(20),
@@ -54,10 +55,13 @@ class UpdateScreen extends StatelessWidget {
 
                     return Column(
                       mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center ,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         // Premium Glow Icon
                         Container(
-                          padding: EdgeInsets.all(4.w),
+                          padding: EdgeInsets.all(2.w),
+                          // margin: EdgeInsets.all(2.w),
                           decoration: BoxDecoration(
                             color: const Color(0xFF8ED6D8).withOpacity(0.1),
                             shape: BoxShape.circle,
