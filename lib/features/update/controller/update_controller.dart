@@ -15,6 +15,7 @@ class UpdateController extends GetxController {
   var isForceUpdate = false.obs;
   var latestVersion = ''.obs;
   var apkUrl = ''.obs;
+  var whatsNew = ''.obs;
 
   // New states for in-app update progress
   var isDownloading = false.obs;
@@ -41,6 +42,7 @@ class UpdateController extends GetxController {
       latestVersion.value = _remoteConfig.getString('latest_version');
       isForceUpdate.value = _remoteConfig.getBool('force_update');
       apkUrl.value = _remoteConfig.getString('apk_url');
+      whatsNew.value = _remoteConfig.getString('whats_new');
 
       final packageInfo = await PackageInfo.fromPlatform();
       final currentVersion = packageInfo.version;

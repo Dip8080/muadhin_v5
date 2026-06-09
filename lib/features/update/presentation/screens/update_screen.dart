@@ -30,7 +30,7 @@ class UpdateScreen extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 1.w),
                 child: Container(
                   width: 90.w,
-                  height: 90.h,
+                  // height: 90.h,
                   padding: EdgeInsets.all(2.w),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.05),
@@ -126,7 +126,9 @@ class UpdateScreen extends StatelessWidget {
                                 ),
                                 SizedBox(height: 1.h),
                                 Text(
-                                  "• Performance optimizations & stability fixes.\n• Seamless background APK update handling.\n• Audio playback improvements.",
+                                  controller.whatsNew.value.isNotEmpty
+                                      ? controller.whatsNew.value.replaceAll('\\n', '\n')
+                                      : "• Performance optimizations & stability fixes.\n• Seamless background APK update handling.\n• Audio playback improvements.",
                                   style: TextStyle(
                                     color: Colors.white60,
                                     fontSize: 1.8.w,
