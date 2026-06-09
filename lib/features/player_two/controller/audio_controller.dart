@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:muaddin/features/player_two/controller/audio_controller_two.dart';
 
 enum AppDrawerType {
   player,
@@ -374,6 +375,21 @@ class AudioController extends GetxController {
     audioPlayer.durationStream.listen((duration) {
       if (duration != null) {
         totalDuration.value = duration;
+      }
+    });
+
+    audioPlayer.playingStream.listen((playing) {
+      if (playing) {
+        try {
+          if (Get.isRegistered<AudioControllerTwo>()) {
+            final other = Get.find<AudioControllerTwo>();
+            if (other.isPlaying.value) {
+              other.pauseAudio();
+            }
+          }
+        } catch (e) {
+          print("Error pausing other player: $e");
+        }
       }
     });
   }

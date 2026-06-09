@@ -5,6 +5,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:muaddin/features/player_two/repository/model/moshaf_model.dart';
 import 'package:muaddin/features/player_two/repository/model/reciter_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:muaddin/features/player_two/controller/audio_controller.dart';
 
 class AudioControllerTwo extends GetxController {
   final AudioPlayer audioPlayer = AudioPlayer(
@@ -340,6 +341,21 @@ int get currentItemCount =>
       if (state.processingState == ProcessingState.completed) {
         if (autoNextSurahEnabled.value && suraIndex.value != -1) {
           playNextSurah();
+        }
+      }
+    });
+
+    audioPlayer.playingStream.listen((playing) {
+      if (playing) {
+        try {
+          if (Get.isRegistered<AudioController>()) {
+            final other = Get.find<AudioController>();
+            if (other.isPlaying.value) {
+              other.pauseAudio();
+            }
+          }
+        } catch (e) {
+          print("Error pausing other player: $e");
         }
       }
     });
