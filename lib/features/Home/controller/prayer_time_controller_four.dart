@@ -607,6 +607,8 @@ class PrayerTimeControllerFour extends GetxController {
     });
   }
 
+  // dead code ; will clean it later
+
   void _forceNextPrayer() {
     final order = ["fajr", "dhuhr", "asr", "maghrib", "isha"];
     final currentIndex = order.indexOf(nextPrayer.value);
@@ -626,6 +628,8 @@ class PrayerTimeControllerFour extends GetxController {
       ).add(const Duration(days: 1));
     }
   }
+
+// dead code wil clean it later
 
   void scheduleMidnightRefresh() {
     final now = getCurrentTime(selectedCountry.value.toLowerCase());
