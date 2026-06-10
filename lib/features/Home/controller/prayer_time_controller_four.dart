@@ -36,6 +36,7 @@ class PrayerTimeControllerFour extends GetxController {
     timezoneLocations.assignAll(tz.timeZoneDatabase.locations.keys.toList());
     update();
   }
+
 // could be better written
   void _startClock() {
     ever(currentTime, (_) => update());
@@ -100,11 +101,16 @@ class PrayerTimeControllerFour extends GetxController {
   }.obs;
 
   final RxMap<String, String> prayerAdhanVoices = <String, String>{
-    "fajr": 'https://firebasestorage.googleapis.com/v0/b/muadhin-a26a0.firebasestorage.app/o/adhan_audio%2Fmuadhin1.mp3?alt=media&token=8465b95c-b29f-4e7f-ba06-00ceab6dc51e',
-    "dhuhr": 'https://firebasestorage.googleapis.com/v0/b/muadhin-a26a0.firebasestorage.app/o/adhan_audio%2Fmuadhin1.mp3?alt=media&token=8465b95c-b29f-4e7f-ba06-00ceab6dc51e',
-    "asr": 'https://firebasestorage.googleapis.com/v0/b/muadhin-a26a0.firebasestorage.app/o/adhan_audio%2Fmuadhin1.mp3?alt=media&token=8465b95c-b29f-4e7f-ba06-00ceab6dc51e',
-    "maghrib": 'https://firebasestorage.googleapis.com/v0/b/muadhin-a26a0.firebasestorage.app/o/adhan_audio%2Fmuadhin1.mp3?alt=media&token=8465b95c-b29f-4e7f-ba06-00ceab6dc51e',
-    "isha": 'https://firebasestorage.googleapis.com/v0/b/muadhin-a26a0.firebasestorage.app/o/adhan_audio%2Fmuadhin1.mp3?alt=media&token=8465b95c-b29f-4e7f-ba06-00ceab6dc51e',
+    "fajr":
+        'https://firebasestorage.googleapis.com/v0/b/muadhin-a26a0.firebasestorage.app/o/adhan_audio%2Fmuadhin1.mp3?alt=media&token=8465b95c-b29f-4e7f-ba06-00ceab6dc51e',
+    "dhuhr":
+        'https://firebasestorage.googleapis.com/v0/b/muadhin-a26a0.firebasestorage.app/o/adhan_audio%2Fmuadhin1.mp3?alt=media&token=8465b95c-b29f-4e7f-ba06-00ceab6dc51e',
+    "asr":
+        'https://firebasestorage.googleapis.com/v0/b/muadhin-a26a0.firebasestorage.app/o/adhan_audio%2Fmuadhin1.mp3?alt=media&token=8465b95c-b29f-4e7f-ba06-00ceab6dc51e',
+    "maghrib":
+        'https://firebasestorage.googleapis.com/v0/b/muadhin-a26a0.firebasestorage.app/o/adhan_audio%2Fmuadhin1.mp3?alt=media&token=8465b95c-b29f-4e7f-ba06-00ceab6dc51e',
+    "isha":
+        'https://firebasestorage.googleapis.com/v0/b/muadhin-a26a0.firebasestorage.app/o/adhan_audio%2Fmuadhin1.mp3?alt=media&token=8465b95c-b29f-4e7f-ba06-00ceab6dc51e',
   }.obs;
   final RxList<String> states = <String>[
     'Gouda',
@@ -480,7 +486,7 @@ class PrayerTimeControllerFour extends GetxController {
       print("Error fetching prayer times: $e");
     }
   }
-  
+
 // helloooooooooooohhkjhkljhnkjlklk
   // tz.TZDateTime getCurrentTime() {
   //   final location = tz.getLocation('Europe/Amsterdam');
@@ -530,7 +536,8 @@ class PrayerTimeControllerFour extends GetxController {
     final parts = time.split(":");
 
     return tz.TZDateTime(
-      tz.getLocation('Europe/Amsterdam'),
+      // tz.getLocation('Europe/Amsterdam'),
+      tz.getLocation('${selectedTimeZone.value}'),
       now.year,
       now.month,
       now.day,
@@ -544,29 +551,76 @@ class PrayerTimeControllerFour extends GetxController {
   late tz.TZDateTime _nextPrayerDateTime;
   late tz.TZDateTime _ZNextPrayerTime;
 
+  // void updatePrayerStatus() {
+  //   if (prayerTimes.isEmpty) return;
+
+  //   // final now = getCurrentTime(selectedCountry.value.toLowerCase());
+  //   final now = effectiveNow;
+  //   final order = ["fajr", "dhuhr", "asr", "maghrib", "isha"];
+
+  //   for (final p in order) {
+  //     final t = parsePrayerTime(prayerTimes[p]!, p);
+  //     if (t.isAfter(now)) {
+  //       nextPrayer.value = p;
+  //       _ZNextPrayerTime = t;
+  //       return;
+  //     }
+  //   }
+
+  //   // After Isha → tomorrow Fajr
+  //   nextPrayer.value = "fajr";
+  //   _ZNextPrayerTime = parsePrayerTime(
+  //     prayerTimes["fajr"]!,
+  //     "fajr",
+  //   ).add(const Duration(days: 1));
+  // }
+
+
+// june 10 - not only fazr , all prayer is under supervision now, we will detect if any prayer cross midnight and adjust it accordingly, this is the most robust way to handle all edge cases
   void updatePrayerStatus() {
     if (prayerTimes.isEmpty) return;
 
-    // final now = getCurrentTime(selectedCountry.value.toLowerCase());
     final now = effectiveNow;
     final order = ["fajr", "dhuhr", "asr", "maghrib", "isha"];
 
-    for (final p in order) {
-      final t = parsePrayerTime(prayerTimes[p]!, p);
-      if (t.isAfter(now)) {
-        nextPrayer.value = p;
-        _ZNextPrayerTime = t;
+    final List<MapEntry<String, tz.TZDateTime>> prayers = [];
+
+    // Build prayer list
+    for (final prayer in order) {
+      prayers.add(
+        MapEntry(
+          prayer,
+          parsePrayerTime(prayerTimes[prayer]!, prayer),
+        ),
+      );
+    }
+
+    // Detect prayers that cross midnight
+    for (int i = 1; i < prayers.length; i++) {
+      if (prayers[i].value.isBefore(prayers[i - 1].value)) {
+        prayers[i] = MapEntry(
+          prayers[i].key,
+          prayers[i].value.add(const Duration(days: 1)),
+        );
+      }
+    }
+
+    // Find next prayer
+    for (final prayer in prayers) {
+      if (prayer.value.isAfter(now)) {
+        nextPrayer.value = prayer.key;
+        _ZNextPrayerTime = prayer.value;
         return;
       }
     }
 
-    // After Isha → tomorrow Fajr
-    nextPrayer.value = "fajr";
-    _ZNextPrayerTime = parsePrayerTime(
-      prayerTimes["fajr"]!,
-      "fajr",
-    ).add(const Duration(days: 1));
+    // If all today's prayers passed, use tomorrow's first prayer
+    nextPrayer.value = prayers.first.key;
+    _ZNextPrayerTime = prayers.first.value.add(const Duration(days: 1));
   }
+
+// june 10 - we need to handle the case when user change the time manually and it cross the prayer time, in that case we need to detect it and play the adhan immediately, this is the most robust way to handle all edge cases
+
 
   // void startTimer() {
   //   _timer?.cancel();
@@ -709,7 +763,8 @@ class PrayerTimeControllerFour extends GetxController {
                 ),
                 DynamicTextWidget(
                   // text: "${prayer.toLowerCase()}_text".tr,
-                  text: "${'time_for'.tr} ${prayer.capitalizeFirst!.toString().tr}",
+                  text:
+                      "${'time_for'.tr} ${prayer.capitalizeFirst!.toString().tr}",
                   fontSize: 3.3,
                   inputWeight: FontWeight.w400,
                   color: Colors.black,
@@ -776,7 +831,8 @@ class PrayerTimeControllerFour extends GetxController {
 
       String currentPrayer = nextPrayer.value.toLowerCase();
       String voiceUrl = prayerAdhanVoices[currentPrayer] ?? adhanVoice.value;
-      bool currentMuted = isMuted.value || (prayerMuteStatus[currentPrayer] ?? false);
+      bool currentMuted =
+          isMuted.value || (prayerMuteStatus[currentPrayer] ?? false);
 
       await _player.setUrl(voiceUrl);
       await _player.setVolume(currentMuted ? 0.0 : 1.0);
