@@ -471,11 +471,11 @@ class PrayerTimeControllerFour extends GetxController {
         prayerTimes.assignAll(cleaned);
 
         // prayerTimes.assignAll({
-        //   "fajr": "17:55",
-        //   "dhuhr": "18:1",
-        //   "asr": "17:47",
-        //   "maghrib": "17:49",
-        //   "isha": "18:50",
+        //   "fajr": "01:00",
+        //   "dhuhr": "12:20",
+        //   "asr": "14:04",
+        //   "maghrib": "14:05",
+        //   "isha": "14:06",
         // });
         print(
             'this is prayer time is the prayertime controller four ${prayerTimes}');
@@ -841,6 +841,11 @@ class PrayerTimeControllerFour extends GetxController {
       print("Error playing Adhan: $e");
       // _closeAdhanPopup();
     }
+  }
+
+     Future<void> stopAllAudio() async {
+    await _player.stop();
+    await _player.dispose();
   }
 
   String get countdownText {

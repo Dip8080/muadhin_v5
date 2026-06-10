@@ -419,7 +419,7 @@ class AudioController extends GetxController {
       playAudio();
     } catch (e) {}
   }
-
+ 
   void playAudio() async {
     await audioPlayer.play();
     isPlaying.value = true;

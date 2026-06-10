@@ -1428,6 +1428,7 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                           onTap: () async {
                             audioController.stopAllAudio();
                             audioControllerTwo.stopAllAudio();
+                            controllerTwo.stopAllAudio();
                             final ctx = context;
 
                             Get.reset();
