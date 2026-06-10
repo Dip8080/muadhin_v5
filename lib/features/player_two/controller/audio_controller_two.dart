@@ -200,39 +200,39 @@ class AudioControllerTwo extends GetxController {
   ];
 
   final List<String> rukyaNames = [
-   "surahAlBaqarah",
-  "generalRuqya",
-  "evilEye",
-  "blackMagic",
-  "knowledge",
-  "advice",
-  "burning",
-  "healing",
-  "zina",
-  "summarisedRuqya",
-  "divorce",
-  "destruction",
-  "falaqNaas",
-  "ayatKursi",
-  "salawat",
-  "jews",
-  "christians",
-  "saaffat",
-  "jinn",
-  "yaseen",
-  "birds",
-  "rizq",
-  "mountains",
-  "guidance",
-  "hairLoss",
-  "fatihah",
-  "lastTwoAyat",
-  "beginningSaaffat",
-  "planetsStars",
-  "seaVerses",
-  "graveVerses",
-  "breastCancer",
-  "walkingIssues",
+    "surahAlBaqarah",
+    "generalRuqya",
+    "evilEye",
+    "blackMagic",
+    "knowledge",
+    "advice",
+    "burning",
+    "healing",
+    "zina",
+    "summarisedRuqya",
+    "divorce",
+    "destruction",
+    "falaqNaas",
+    "ayatKursi",
+    "salawat",
+    "jews",
+    "christians",
+    "saaffat",
+    "jinn",
+    "yaseen",
+    "birds",
+    "rizq",
+    "mountains",
+    "guidance",
+    "hairLoss",
+    "fatihah",
+    "lastTwoAyat",
+    "beginningSaaffat",
+    "planetsStars",
+    "seaVerses",
+    "graveVerses",
+    "breastCancer",
+    "walkingIssues",
   ];
 
   final List<String> rukyaUrls = [
@@ -271,8 +271,22 @@ class AudioControllerTwo extends GetxController {
     "https://www.ruqyainlondon.com/files/ruqya/walking.mp3",
   ];
 
-final List<String> duaName = ["Mishary Alafasi", "Idriss Abkar","Walid Atef","Ahmed abdul Rahman darar", "Muhammad jebril", "Rami Aldeais","Nasser Alqatami", "Majed Al-Zamil",
-  "Abdulbari Athobaity", "Abdulrahman Assudais", "Adel Rayan", "Maher Al-Mueaqly","Tawfeeq As-Sayegh", "Muhammad Al-Muhasny","Hani Arrifai"
+  final List<String> duaName = [
+    "Mishary Alafasi",
+    "Idriss Abkar",
+    "Walid Atef",
+    "Ahmed abdul Rahman darar",
+    "Muhammad jebril",
+    "Rami Aldeais",
+    "Nasser Alqatami",
+    "Majed Al-Zamil",
+    "Abdulbari Athobaity",
+    "Abdulrahman Assudais",
+    "Adel Rayan",
+    "Maher Al-Mueaqly",
+    "Tawfeeq As-Sayegh",
+    "Muhammad Al-Muhasny",
+    "Hani Arrifai"
   ];
   final List<String> duaUrls = [
     "https://download.tvquran.com/download/TvQuran.com__Doaa/TvQuran.com__d08.mp3",
@@ -291,11 +305,10 @@ final List<String> duaName = ["Mishary Alafasi", "Idriss Abkar","Walid Atef","Ah
     "https://download.tvquran.com/download/TvQuran.com__Doaa/TvQuran.com__d03.mp3",
     "https://download.tvquran.com/download/TvQuran.com__Doaa/TvQuran.com__d02.mp3"
   ];
-  List<String> get currentTitles =>
-    isRukyaMode.value ? rukyaNames : duaName;
+  List<String> get currentTitles => isRukyaMode.value ? rukyaNames : duaName;
 
-int get currentItemCount =>
-    isRukyaMode.value ? rukyaNames.length : duaName.length;
+  int get currentItemCount =>
+      isRukyaMode.value ? rukyaNames.length : duaName.length;
 
   @override
   void onInit() {
@@ -453,16 +466,14 @@ int get currentItemCount =>
   }
 
   Future<void> playDua(int index) async {
-  final url = duaUrls[index];
+    final url = duaUrls[index];
 
-  await audioPlayer.setUrl(url);
-  await audioPlayer.play();
+    await audioPlayer.setUrl(url);
+    await audioPlayer.play();
 
-  rukyaIndex.value = index; // reuse index for header display
-  isPlaying.value = true;
-}
-
-
+    rukyaIndex.value = index; // reuse index for header display
+    isPlaying.value = true;
+  }
 
   String buildSurahUrl(int surahNumber) {
     final moshaf = selectedMoshaf.value!;
@@ -529,6 +540,11 @@ int get currentItemCount =>
 
   void toggleVolumeSlider() {
     isVolumeSliderVisible.value = !isVolumeSliderVisible.value;
+  }
+
+  Future<void> stopAllAudio() async {
+    await audioPlayer.stop();
+    await audioPlayer.dispose();
   }
 
   @override

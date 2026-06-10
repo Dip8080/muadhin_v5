@@ -11,6 +11,7 @@ import 'package:muaddin/features/Home/controller/brightness_controller.dart';
 import 'package:muaddin/features/Home/controller/prayer_time_controller_four.dart';
 import 'package:muaddin/features/Home/controller/wallpaper_controller.dart';
 import 'package:muaddin/features/player_two/controller/audio_controller.dart';
+import 'package:muaddin/features/player_two/controller/audio_controller_two.dart';
 import 'package:muaddin/features/update/controller/update_controller.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:android_intent_plus/android_intent.dart';
@@ -22,6 +23,7 @@ class Transparent_drawer_settings_two extends StatelessWidget {
 
   Transparent_drawer_settings_two({required this.context});
   final AudioController audioController = Get.find();
+  final AudioControllerTwo audioControllerTwo = Get.find();
   final BrightnessController brightnessController = Get.find();
     final UpdateController updateController = Get.find();
 
@@ -1424,6 +1426,8 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                           title: 'Restart Muadhin',
                           subtitle: 'click to restart muadhin screen'.tr,
                           onTap: () async {
+                            audioController.stopAllAudio();
+                            audioControllerTwo.stopAllAudio();
                             final ctx = context;
 
                             Get.reset();

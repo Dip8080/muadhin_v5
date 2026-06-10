@@ -474,6 +474,11 @@ class AudioController extends GetxController {
     isVolumeSliderVisible.value = !isVolumeSliderVisible.value;
   }
 
+   Future<void> stopAllAudio() async {
+    await audioPlayer.stop();
+    await audioPlayer.dispose();
+  }
+
   @override
   void onClose() {
     audioPlayer.dispose();
