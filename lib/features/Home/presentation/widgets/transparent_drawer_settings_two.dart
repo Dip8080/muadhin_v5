@@ -1440,94 +1440,94 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                           },
                         ),
                         // about section
-                        // SettingsTile(
-                        //   icon: Icons.info_outline,
-                        //   title: _getLocalText('about_title'),
-                        //   subtitle: _getLocalText('about_subtitle'),
-                        //   onTap: () {
-                        //     _isAboutExpanded.value = !_isAboutExpanded.value;
-                        //   },
-                        // ),
-                        // _isAboutExpanded.value
-                        //     ? Container(
-                        //         margin: const EdgeInsets.symmetric(vertical: 8),
-                        //         padding: const EdgeInsets.all(16),
-                        //         decoration: BoxDecoration(
-                        //           color: Colors.blueAccent.withOpacity(0.08),
-                        //           border: Border.all(
-                        //             color: Colors.white24,
-                        //             width: .5,
-                        //           ),
-                        //           borderRadius: BorderRadius.circular(18),
-                        //         ),
-                        //         child: Column(
-                        //           crossAxisAlignment: CrossAxisAlignment.start,
-                        //           children: [
-                        //             Row(
-                        //               children: [
-                        //                 Icon(
-                        //                   Icons.info,
-                        //                   color: const Color.fromARGB(255, 167, 203, 255),
-                        //                   size: 3.w,
-                        //                 ),
-                        //                 const SizedBox(width: 12),
-                        //                 Expanded(
-                        //                   child: Column(
-                        //                     crossAxisAlignment: CrossAxisAlignment.start,
-                        //                     children: [
-                        //                       Text(
-                        //                         'Muadhin',
-                        //                         style: TextStyle(
-                        //                           color: Colors.white,
-                        //                           fontSize: 1.8.w,
-                        //                           fontWeight: FontWeight.bold,
-                        //                           letterSpacing: 1.2,
-                        //                         ),
-                        //                       ),
-                        //                       Text(
-                        //                         'Version ${updateController.latestVersion.toString()} (Build 1)',
-                        //                         style: TextStyle(
-                        //                           color: Colors.white70,
-                        //                           fontSize: 1.4.w,
-                        //                         ),
-                        //                       ),
-                        //                     ],
-                        //                   ),
-                        //                 ),
-                        //               ],
-                        //             ),
-                        //             const SizedBox(height: 16),
-                        //             Text(
-                        //               _getLocalText('app_desc'),
-                        //               style: TextStyle(
-                        //                 color: Colors.white.withOpacity(0.85),
-                        //                 fontSize: 1.4.w,
-                        //                 height: 1.4,
-                        //               ),
-                        //             ),
-                        //             const SizedBox(height: 16),
-                        //             const Divider(color: Colors.white24, height: 1),
-                        //             const SizedBox(height: 12),
-                        //             _buildInfoRow(Icons.check_circle_outline, _getLocalText('f1')),
-                        //             _buildInfoRow(Icons.check_circle_outline, _getLocalText('f2')),
-                        //             _buildInfoRow(Icons.check_circle_outline, _getLocalText('f3')),
-                        //             _buildInfoRow(Icons.check_circle_outline, _getLocalText('f4')),
-                        //             const SizedBox(height: 12),
-                        //             const Divider(color: Colors.white24, height: 1),
-                        //             const SizedBox(height: 12),
-                        //             Center(
-                        //               child: Text(
-                        //                 _getLocalText('copyright'),
-                        //                 style: TextStyle(
-                        //                   color: Colors.white38,
-                        //                   fontSize: 1.2.w,
-                        //                 ),
-                        //               ),
-                        //             ),
-                        //           ],
-                        //         ),
-                        //       )
-                        //     : const SizedBox.shrink(),
+                        SettingsTile(
+                          icon: Icons.info_outline,
+                          title: _getLocalText('about_title'),
+                          subtitle: _getLocalText('about_subtitle'),
+                          onTap: () {
+                            _isAboutExpanded.value = !_isAboutExpanded.value;
+                          },
+                        ),
+                        _isAboutExpanded.value
+                            ? Container(
+                                margin: const EdgeInsets.symmetric(vertical: 8),
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  color: Colors.blueAccent.withOpacity(0.08),
+                                  border: Border.all(
+                                    color: Colors.white24,
+                                    width: .5,
+                                  ),
+                                  borderRadius: BorderRadius.circular(18),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.info,
+                                          color: const Color.fromARGB(255, 167, 203, 255),
+                                          size: 3.w,
+                                        ),
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Muadhin',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 1.8.w,
+                                                  fontWeight: FontWeight.bold,
+                                                  letterSpacing: 1.2,
+                                                ),
+                                              ),
+                                              Text(
+                                                'Version: ${audioController.appVersion}',
+                                                style: TextStyle(
+                                                  color: Colors.white70,
+                                                  fontSize: 1.4.w,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Text(
+                                      _getLocalText('app_desc'),
+                                      style: TextStyle(
+                                        color: Colors.white.withOpacity(0.85),
+                                        fontSize: 1.4.w,
+                                        height: 1.4,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    const Divider(color: Colors.white24, height: 1),
+                                    const SizedBox(height: 12),
+                                    _buildInfoRow(Icons.check_circle_outline, _getLocalText('f1')),
+                                    _buildInfoRow(Icons.check_circle_outline, _getLocalText('f2')),
+                                    _buildInfoRow(Icons.check_circle_outline, _getLocalText('f3')),
+                                    _buildInfoRow(Icons.check_circle_outline, _getLocalText('f4')),
+                                    const SizedBox(height: 12),
+                                    const Divider(color: Colors.white24, height: 1),
+                                    const SizedBox(height: 12),
+                                    Center(
+                                      child: Text(
+                                        _getLocalText('copyright'),
+                                        style: TextStyle(
+                                          color: Colors.white38,
+                                          fontSize: 1.2.w,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : const SizedBox.shrink(),
 
                         // about section
                       ],

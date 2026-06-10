@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:muaddin/features/player_two/controller/audio_controller_two.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 enum AppDrawerType {
   player,
@@ -16,6 +17,8 @@ class AudioController extends GetxController {
       ],
     ),
   );
+  var appVersion = ''.obs;
+
   var activeDrawer = AppDrawerType.player.obs;
 
   var position = Duration.zero.obs;
@@ -31,6 +34,11 @@ class AudioController extends GetxController {
   var openAudioPlayer = false.obs;
   var showAdhanTimesOnSide = false.obs;
   var isHadia = false.obs;
+
+  Future<void> _loadVersion() async {
+    final info = await PackageInfo.fromPlatform();
+    appVersion.value = '${info.version}';
+  }
 
   final List<String> surahNames = [
     "Al-Fatihah",
@@ -392,6 +400,7 @@ class AudioController extends GetxController {
         }
       }
     });
+    _loadVersion();
   }
 
   void toogleOpenAudioPlayer(bool value) {
@@ -419,7 +428,7 @@ class AudioController extends GetxController {
       playAudio();
     } catch (e) {}
   }
- 
+
   void playAudio() async {
     await audioPlayer.play();
     isPlaying.value = true;
@@ -474,7 +483,7 @@ class AudioController extends GetxController {
     isVolumeSliderVisible.value = !isVolumeSliderVisible.value;
   }
 
-   Future<void> stopAllAudio() async {
+  Future<void> stopAllAudio() async {
     await audioPlayer.stop();
     await audioPlayer.dispose();
   }
