@@ -684,6 +684,9 @@ class PrayerTimeControllerFour extends GetxController {
   }
 
 // dead code wil clean it later
+// dead code wil clean it later
+// dead code wil clean it later
+// dead code wil clean it later
 
   void scheduleMidnightRefresh() {
     final now = getCurrentTime(selectedCountry.value.toLowerCase());
