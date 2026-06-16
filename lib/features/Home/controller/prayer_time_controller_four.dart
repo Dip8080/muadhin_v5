@@ -757,6 +757,10 @@ class PrayerTimeControllerFour extends GetxController {
                 DynamicTextWidget(
                   text: 'calling_adhan'.tr,
                   // text: '${prayer.toLowerCase()}_title'.tr,
+                  // text: '${prayer.toLowerCase()}_title'.tr,
+                  // text: '${prayer.toLowerCase()}_title'.tr,
+                  // text: '${prayer.toLowerCase()}_title'.tr,
+                  // text: '${prayer.toLowerCase()}_title'.tr,
                   fontSize: 5,
                   inputWeight: FontWeight.w600,
                   color: Colors.black,
