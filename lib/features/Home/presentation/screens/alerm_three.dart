@@ -249,6 +249,10 @@ class _AlermThreeState extends State<AlermThree> {
           // wallpaperController.changeHadith();
           wallpaperController.nextHadith();
         },
+        onDoubleTap: () {
+          print('double tap detected');
+          controllerTwo.testAdhan();
+        },
         child: Scaffold(
           resizeToAvoidBottomInset: true,
           key: scaffoldKey,

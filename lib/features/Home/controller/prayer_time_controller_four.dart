@@ -622,23 +622,6 @@ class PrayerTimeControllerFour extends GetxController {
 // june 10 - we need to handle the case when user change the time manually and it cross the prayer time, in that case we need to detect it and play the adhan immediately, this is the most robust way to handle all edge cases
 
 
-  // void startTimer() {
-  //   _timer?.cancel();
-  //   _timer = Timer.periodic(const Duration(seconds: 1), (_) {
-  //     final now = getCurrentTime(selectedCountry.value.toLowerCase());
-  //     final diff = _ZNextPrayerTime.difference(now);
-
-  //     timeRemaining.value = diff;
-
-  //     if (diff.inSeconds <= 0 && _lastPlayedPrayer != nextPrayer.value) {
-  //       _lastPlayedPrayer = nextPrayer.value;
-  //       _playAdhan();
-
-  //       // 🚨 FORCE MOVE TO NEXT PRAYER
-  //       _forceNextPrayer();
-  //     }
-  //   });
-  // }
 
   void startTimer() {
     _timer?.cancel();
@@ -818,6 +801,25 @@ class PrayerTimeControllerFour extends GetxController {
       Get.back();
     }
   }
+
+
+  void testAdhan() {
+  manualDateTime.value = tz.TZDateTime(
+    tz.getLocation('Europe/Amsterdam'),
+    2026,
+    6,
+    17,
+    03,
+    08,
+    55,
+  );
+
+  isManualTimeEnabled.value = true;
+
+  updatePrayerStatus();
+  startTimer();
+}
+
 
   Future<void> _playAdhan() async {
     try {
