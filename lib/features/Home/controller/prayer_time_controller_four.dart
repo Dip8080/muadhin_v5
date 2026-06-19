@@ -10,6 +10,8 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter/material.dart';
 import 'package:muaddin/core/widgets/dynamic_text_widget.dart';
+import 'package:muaddin/features/player_two/controller/audio_controller.dart';
+import 'package:muaddin/features/player_two/controller/audio_controller_two.dart';
 
 class PrayerTimeControllerFour extends GetxController {
   // need to upgrade hedia
@@ -835,6 +837,28 @@ class PrayerTimeControllerFour extends GetxController {
 
   Future<void> _playAdhan() async {
     try {
+      try {
+        if (Get.isRegistered<AudioController>()) {
+          final audioCtrl = Get.find<AudioController>();
+          if (audioCtrl.isPlaying.value) {
+            audioCtrl.pauseAudio();
+          }
+        }
+      } catch (e) {
+        print("Error pausing AudioController: $e");
+      }
+
+      try {
+        if (Get.isRegistered<AudioControllerTwo>()) {
+          final audioCtrlTwo = Get.find<AudioControllerTwo>();
+          if (audioCtrlTwo.isPlaying.value) {
+            audioCtrlTwo.pauseAudio();
+          }
+        }
+      } catch (e) {
+        print("Error pausing AudioControllerTwo: $e");
+      }
+
       if (_playerReady) {
         await _player.stop();
         await _player.dispose();
