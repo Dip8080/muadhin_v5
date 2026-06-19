@@ -824,9 +824,9 @@ class PrayerTimeControllerFour extends GetxController {
       2026,
       6,
       17,
-      23,
-      59,
-      50,
+      22,
+      04,
+      55,
     );
 
     updatePrayerStatus();
