@@ -575,7 +575,6 @@ class PrayerTimeControllerFour extends GetxController {
   //   ).add(const Duration(days: 1));
   // }
 
-
 // june 10 - not only fazr , all prayer is under supervision now, we will detect if any prayer cross midnight and adjust it accordingly, this is the most robust way to handle all edge cases
   void updatePrayerStatus() {
     if (prayerTimes.isEmpty) return;
@@ -620,8 +619,6 @@ class PrayerTimeControllerFour extends GetxController {
   }
 
 // june 10 - we need to handle the case when user change the time manually and it cross the prayer time, in that case we need to detect it and play the adhan immediately, this is the most robust way to handle all edge cases
-
-
 
   void startTimer() {
     _timer?.cancel();
@@ -674,7 +671,7 @@ class PrayerTimeControllerFour extends GetxController {
   void scheduleMidnightRefresh() {
     final now = getCurrentTime(selectedCountry.value.toLowerCase());
     final tomorrow = tz.TZDateTime(
-      tz.getLocation('Europe/Amsterdam'),
+      tz.getLocation('${selectedTimeZone.value}'),
       now.year,
       now.month,
       now.day + 1,
@@ -802,24 +799,39 @@ class PrayerTimeControllerFour extends GetxController {
     }
   }
 
+//   void testAdhan() {
+//   manualDateTime.value = tz.TZDateTime(
+//     tz.getLocation('${selectedTimeZone}'),
+//     2026,
+//     6,
+//     17,
+//     03,
+//     08,
+//     55,
+//   );
+
+//   isManualTimeEnabled.value = true;
+
+//   updatePrayerStatus();
+//   startTimer();
+// }
 
   void testAdhan() {
-  manualDateTime.value = tz.TZDateTime(
-    tz.getLocation('Europe/Amsterdam'),
-    2026,
-    6,
-    17,
-    03,
-    08,
-    55,
-  );
+    isManualTimeEnabled.value = true;
 
-  isManualTimeEnabled.value = true;
+    manualDateTime.value = tz.TZDateTime(
+      tz.getLocation(selectedTimeZone.value),
+      2026,
+      6,
+      17,
+      23,
+      59,
+      50,
+    );
 
-  updatePrayerStatus();
-  startTimer();
-}
-
+    updatePrayerStatus();
+    startTimer();
+  }
 
   Future<void> _playAdhan() async {
     try {
@@ -852,7 +864,7 @@ class PrayerTimeControllerFour extends GetxController {
     }
   }
 
-     Future<void> stopAllAudio() async {
+  Future<void> stopAllAudio() async {
     await _player.stop();
     await _player.dispose();
   }

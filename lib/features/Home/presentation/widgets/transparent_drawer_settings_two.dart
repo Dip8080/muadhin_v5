@@ -1433,7 +1433,6 @@ class Transparent_drawer_settings_two extends StatelessWidget {
 
                             Get.reset();
                             await AppInitializer.init();
-
                             Future.microtask(() {
                               RestartWidget.restartApp(ctx);
                             });
