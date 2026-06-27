@@ -462,7 +462,13 @@ class PrayerTimeControllerFour extends GetxController {
         final todayIndex = now.day - 1;
         final todayTimings = data['data'][todayIndex]['timings'];
 
-        // normalize and clean (remove (CEST) etc.)
+        // normalize and cl ean (remove (CEST) etc.)
+        // normalize and cl ean (remove (CEST) etc.)
+        // normalize and cl ean (remove (CEST) etc.)
+        // normalize and cl ean (remove (CEST) etc.)
+        // normalize and cl ean (remove (CEST) etc.)
+        // normalize and cl ean (remove (CEST) etc.)
+        // normalize and cl ean (remove (CEST) etc.)
         final cleaned = <String, String>{};
         for (final key in ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"]) {
           String raw = todayTimings[key];
