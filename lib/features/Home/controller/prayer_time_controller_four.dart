@@ -15,6 +15,10 @@ import 'package:muaddin/features/player_two/controller/audio_controller_two.dart
 
 class PrayerTimeControllerFour extends GetxController {
   // need to upgrade hedia
+  // need to upgrade hedia
+  // need to upgrade hedia
+  // need to upgrade hedia
+  // need to upgrade hedia
   // for clock
   final RxBool isManualTimeEnabled = false.obs;
   final Rx<tz.TZDateTime?> manualDateTime = Rx<tz.TZDateTime?>(null);
