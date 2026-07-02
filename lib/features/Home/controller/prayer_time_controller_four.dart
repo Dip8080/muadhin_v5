@@ -465,14 +465,6 @@ class PrayerTimeControllerFour extends GetxController {
         final data = jsonDecode(response.body);
         final todayIndex = now.day - 1;
         final todayTimings = data['data'][todayIndex]['timings'];
-
-        // normalize and cl ean (remove (CEST) etc.)
-        // normalize and cl ean (remove (CEST) etc.)
-        // normalize and cl ean (remove (CEST) etc.)
-        // normalize and cl ean (remove (CEST) etc.)
-        // normalize and cl ean (remove (CEST) etc.)
-        // normalize and cl ean (remove (CEST) etc.)
-        // normalize and cl ean (remove (CEST) etc.)
         final cleaned = <String, String>{};
         for (final key in ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"]) {
           String raw = todayTimings[key];
@@ -480,15 +472,15 @@ class PrayerTimeControllerFour extends GetxController {
           cleaned[key.toLowerCase()] = raw;
         }
 
-        prayerTimes.assignAll(cleaned);
+        // prayerTimes.assignAll(cleaned);
 
-        // prayerTimes.assignAll({
-        //   "fajr": "01:00",
-        //   "dhuhr": "12:20",
-        //   "asr": "14:04",
-        //   "maghrib": "14:05",
-        //   "isha": "14:06",
-        // });
+        prayerTimes.assignAll({
+          "fajr": "12:39",
+          "dhuhr": "12:40",
+          "asr": "12:41",
+          "maghrib": "14:42",
+          "isha": "14:43",
+        });
         print(
             'this is prayer time is the prayertime controller four ${prayerTimes}');
         updatePrayerStatus();
