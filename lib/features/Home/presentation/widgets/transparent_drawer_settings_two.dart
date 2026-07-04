@@ -1431,6 +1431,10 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                             controllerTwo.stopAllAudio();
                             final ctx = context;
 
+                            Get.delete<AudioController>(force: true);
+                            Get.delete<AudioControllerTwo>(force: true);
+                            Get.delete<PrayerTimeControllerFour>(force: true);
+
                             Get.reset();
                             await AppInitializer.init();
                             Future.microtask(() {

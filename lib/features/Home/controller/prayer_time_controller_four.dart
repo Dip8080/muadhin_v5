@@ -520,10 +520,10 @@ class PrayerTimeControllerFour extends GetxController {
 
 
        prayerTimes.assignAll({
-         "fajr": "12:17",
-         "dhuhr": "12:18",
-         "asr": "12:19",
-         "maghrib": "12:30",
+         "fajr": "13:06",
+         "dhuhr": "13:07",
+         "asr": "13:08",
+         "maghrib": "13:09",
          "isha": "12:40",
        });
        print(
@@ -961,13 +961,12 @@ class PrayerTimeControllerFour extends GetxController {
 
      String currentPrayer = nextPrayer.value.toLowerCase();
      String voiceUrl = prayerAdhanVoices[currentPrayer] ?? adhanVoice.value;
-     bool currentMuted =
-         isMuted.value || (prayerMuteStatus[currentPrayer] ?? false);
-
-
-     await _player.setUrl(voiceUrl);
-     await _player.setVolume(currentMuted ? 0.0 : 1.0);
-     await _player.play();
+      await _player.setUrl(voiceUrl);
+      bool currentMuted =
+          isMuted.value || (prayerMuteStatus[currentPrayer] ?? false);
+      await _player.setVolume(currentMuted ? 0.0 : 1.0);
+      await _player.play();
+      await _player.setVolume(currentMuted ? 0.0 : 1.0);
    } catch (e) {
      print("Error playing Adhan: $e");
      // _closeAdhanPopup();
