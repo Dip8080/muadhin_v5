@@ -7,6 +7,7 @@ import 'package:muaddin/core/utility/app_initializer.dart';
 import 'package:muaddin/core/widgets/dynamic_text_widget.dart';
 import 'package:muaddin/core/widgets/restart_widget.dart';
 import 'package:muaddin/core/widgets/setting_tile.dart';
+import 'package:muaddin/core/widgets/scrolling_text.dart';
 import 'package:muaddin/features/Home/controller/brightness_controller.dart';
 import 'package:muaddin/features/Home/controller/prayer_time_controller_four.dart';
 import 'package:muaddin/features/Home/controller/wallpaper_controller.dart';
@@ -25,7 +26,7 @@ class Transparent_drawer_settings_two extends StatelessWidget {
   final AudioController audioController = Get.find();
   final AudioControllerTwo audioControllerTwo = Get.find();
   final BrightnessController brightnessController = Get.find();
-    final UpdateController updateController = Get.find();
+  final UpdateController updateController = Get.find();
 
   // final ClockController clockController = Get.find();
   final WallpaperController wallpaperController = Get.find();
@@ -366,7 +367,8 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                                                                     height: 3.w,
                                                                     // color: Colors
                                                                     //     .white,
-                                                                    color: Colors.blueAccent,
+                                                                    color: Colors
+                                                                        .blueAccent,
                                                                   ),
                                                                   SizedBox(
                                                                     width: 10,
@@ -900,25 +902,37 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                                             children: [
                                               Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment.spaceBetween,
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: [
                                                   // Prayer name
                                                   Row(
                                                     children: [
                                                       Obx(() => IconButton(
-                                                            padding: EdgeInsets.zero,
-                                                            constraints: BoxConstraints(),
+                                                            padding:
+                                                                EdgeInsets.zero,
+                                                            constraints:
+                                                                BoxConstraints(),
                                                             icon: Icon(
-                                                              (controllerTwo.prayerMuteStatus[key.toLowerCase()] ?? false)
-                                                                  ? Icons.volume_off
-                                                                  : Icons.volume_up,
-                                                              color: (controllerTwo.prayerMuteStatus[key.toLowerCase()] ?? false)
+                                                              (controllerTwo.prayerMuteStatus[key
+                                                                          .toLowerCase()] ??
+                                                                      false)
+                                                                  ? Icons
+                                                                      .volume_off
+                                                                  : Icons
+                                                                      .volume_up,
+                                                              color: (controllerTwo
+                                                                              .prayerMuteStatus[
+                                                                          key.toLowerCase()] ??
+                                                                      false)
                                                                   ? Colors.red
                                                                   : Colors.white,
                                                               size: 20,
                                                             ),
                                                             onPressed: () {
-                                                              controllerTwo.togglePrayerMute(key);
+                                                              controllerTwo
+                                                                  .togglePrayerMute(
+                                                                      key);
                                                             },
                                                           )),
                                                       SizedBox(width: 8),
@@ -936,7 +950,8 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                                                         icon: Icon(
                                                             Icons
                                                                 .remove_circle_outline,
-                                                            color: Colors.white),
+                                                            color:
+                                                                Colors.white),
                                                         onPressed: () {
                                                           controllerTwo
                                                               .decreasePrayerTime(key
@@ -948,7 +963,8 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                                                         icon: Icon(
                                                             Icons
                                                                 .add_circle_outline,
-                                                            color: Colors.white),
+                                                            color:
+                                                                Colors.white),
                                                         onPressed: () {
                                                           controllerTwo
                                                               .increasePrayerTime(key
@@ -960,41 +976,88 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                                                   ),
                                                 ],
                                               ),
-                                              Divider(color: Colors.white12, height: 1),
+                                              Divider(
+                                                  color: Colors.white12,
+                                                  height: 1),
                                               Padding(
-                                                padding: EdgeInsets.only(top: 8.0),
+                                                padding:
+                                                    EdgeInsets.only(top: 8.0),
                                                 child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
                                                     Text(
                                                       '${'Muadhin'.tr}: ',
-                                                      style: TextStyle(color: Colors.white70, fontSize: 1.8.w),
+                                                      style: TextStyle(
+                                                        color: Colors.white70,
+                                                        fontSize: 1.8.w,
+                                                      ),
                                                     ),
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        _showMuadhinSelector(context, key);
-                                                      },
-                                                      child: Container(
-                                                        padding: EdgeInsets.symmetric(horizontal: 1.2.w, vertical: 0.5.h),
-                                                        decoration: BoxDecoration(
-                                                          color: Colors.white.withOpacity(0.05),
-                                                          border: Border.all(color: Colors.white24),
-                                                          borderRadius: BorderRadius.circular(5),
+                                                    SizedBox(width: 8.w),
+                                                    Expanded(
+                                                      child: GestureDetector(
+                                                        onTap: () {
+                                                          _showMuadhinSelector(
+                                                              context, key);
+                                                        },
+                                                        child: Container(
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                            horizontal: 1.2.w,
+                                                            vertical: 0.5.h,
+                                                          ),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Colors.white
+                                                                .withOpacity(
+                                                                    0.05),
+                                                            border: Border.all(
+                                                                color: Colors
+                                                                    .white24),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5),
+                                                          ),
+                                                          child: Obx(() {
+                                                            String
+                                                                currentVoice =
+                                                                controllerTwo
+                                                                            .prayerAdhanVoices[
+                                                                        key.toLowerCase()] ??
+                                                                    '';
+
+                                                            int index =
+                                                                audioController
+                                                                    .adhanUrl
+                                                                    .indexOf(
+                                                                        currentVoice);
+
+                                                            String name = index !=
+                                                                    -1
+                                                                ? audioController
+                                                                        .muajjinName[
+                                                                    index]
+                                                                : 'Select';
+
+                                                            return Text(
+                                                              name,
+                                                              maxLines: 1,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              softWrap: false,
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 1.6.w,
+                                                              ),
+                                                            );
+                                                          }),
                                                         ),
-                                                        child: Obx(() {
-                                                          String currentVoice = controllerTwo.prayerAdhanVoices[key.toLowerCase()] ?? '';
-                                                          int index = audioController.adhanUrl.indexOf(currentVoice);
-                                                          String name = index != -1 ? audioController.muajjinName[index] : 'Select';
-                                                          return Text(
-                                                            name,
-                                                            style: TextStyle(color: Colors.white, fontSize: 1.6.w),
-                                                          );
-                                                        }),
                                                       ),
                                                     ),
                                                   ],
                                                 ),
-                                              ),
+                                              )
                                             ],
                                           ),
                                         );
@@ -1282,26 +1345,32 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                                                         MainAxisAlignment
                                                             .spaceBetween,
                                                     children: [
-                                                      Row(
-                                                        children: <Widget>[
-                                                          diamond_container(
-                                                              index),
-                                                          SizedBox(
-                                                            width: 1.w,
-                                                          ),
-                                                          Text(
-                                                            audioController
-                                                                    .muajjinName[
-                                                                index],
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 24),
-                                                          ),
-                                                          SizedBox(
-                                                            width: 0.w,
-                                                          ),
-                                                        ],
+                                                      Expanded(
+                                                        child: Row(
+                                                          children: <Widget>[
+                                                            diamond_container(
+                                                                index),
+                                                            SizedBox(
+                                                              width: 1.w,
+                                                            ),
+                                                            Expanded(
+                                                              child:
+                                                                  ScrollingText(
+                                                                text: audioController
+                                                                        .muajjinName[
+                                                                    index],
+                                                                textStyle: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        24),
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              width: 0.w,
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
                                                       GestureDetector(
                                                         onTap: () {
@@ -1470,13 +1539,15 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                                       children: [
                                         Icon(
                                           Icons.info,
-                                          color: const Color.fromARGB(255, 167, 203, 255),
+                                          color: const Color.fromARGB(
+                                              255, 167, 203, 255),
                                           size: 3.w,
                                         ),
                                         const SizedBox(width: 12),
                                         Expanded(
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 'Muadhin',
@@ -1509,14 +1580,20 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                                       ),
                                     ),
                                     const SizedBox(height: 16),
-                                    const Divider(color: Colors.white24, height: 1),
+                                    const Divider(
+                                        color: Colors.white24, height: 1),
                                     const SizedBox(height: 12),
-                                    _buildInfoRow(Icons.check_circle_outline, _getLocalText('f1')),
-                                    _buildInfoRow(Icons.check_circle_outline, _getLocalText('f2')),
-                                    _buildInfoRow(Icons.check_circle_outline, _getLocalText('f3')),
-                                    _buildInfoRow(Icons.check_circle_outline, _getLocalText('f4')),
+                                    _buildInfoRow(Icons.check_circle_outline,
+                                        _getLocalText('f1')),
+                                    _buildInfoRow(Icons.check_circle_outline,
+                                        _getLocalText('f2')),
+                                    _buildInfoRow(Icons.check_circle_outline,
+                                        _getLocalText('f3')),
+                                    _buildInfoRow(Icons.check_circle_outline,
+                                        _getLocalText('f4')),
                                     const SizedBox(height: 12),
-                                    const Divider(color: Colors.white24, height: 1),
+                                    const Divider(
+                                        color: Colors.white24, height: 1),
                                     const SizedBox(height: 12),
                                     Center(
                                       child: Text(
@@ -1555,7 +1632,8 @@ class Transparent_drawer_settings_two extends StatelessWidget {
         ),
         title: Text(
           'Select Muadhin for ${prayerKey.capitalizeFirst}',
-          style: TextStyle(color: Colors.white, fontSize: 2.w, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: Colors.white, fontSize: 2.w, fontWeight: FontWeight.bold),
         ),
         content: Container(
           width: double.maxFinite,
@@ -1567,13 +1645,18 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                 bool isThisAdhanPlaying = audioController.isPlaying.value &&
                     (audioController.adhanIndex.value == index);
 
-                String currentVoice = controllerTwo.prayerAdhanVoices[prayerKey.toLowerCase()] ?? '';
-                bool isSelected = currentVoice == audioController.adhanUrl[index];
+                String currentVoice =
+                    controllerTwo.prayerAdhanVoices[prayerKey.toLowerCase()] ??
+                        '';
+                bool isSelected =
+                    currentVoice == audioController.adhanUrl[index];
 
                 return Container(
                   margin: EdgeInsets.symmetric(vertical: 0.5.h),
                   decoration: BoxDecoration(
-                    color: isSelected ? Colors.white.withOpacity(0.08) : Colors.transparent,
+                    color: isSelected
+                        ? Colors.white.withOpacity(0.08)
+                        : Colors.transparent,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
                       color: isSelected ? Colors.white38 : Colors.transparent,
@@ -1581,13 +1664,15 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                     ),
                   ),
                   child: ListTile(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 0.5.h),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 1.w, vertical: 0.5.h),
                     leading: IconButton(
                       icon: Icon(
                         isThisAdhanPlaying
                             ? Icons.pause_circle_filled
                             : Icons.play_circle_filled,
-                        color: isThisAdhanPlaying ? Colors.amber : Colors.white70,
+                        color:
+                            isThisAdhanPlaying ? Colors.amber : Colors.white70,
                         size: 26,
                       ),
                       onPressed: () {
@@ -1604,14 +1689,18 @@ class Transparent_drawer_settings_two extends StatelessWidget {
                       style: TextStyle(
                         color: isSelected ? Colors.amber : Colors.white,
                         fontSize: 1.8.w,
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        fontWeight:
+                            isSelected ? FontWeight.bold : FontWeight.normal,
                       ),
                     ),
                     trailing: isSelected
-                        ? Icon(Icons.check_circle, color: Colors.greenAccent, size: 22)
-                        : Icon(Icons.circle_outlined, color: Colors.white24, size: 22),
+                        ? Icon(Icons.check_circle,
+                            color: Colors.greenAccent, size: 22)
+                        : Icon(Icons.circle_outlined,
+                            color: Colors.white24, size: 22),
                     onTap: () {
-                      controllerTwo.setPrayerAdhan(prayerKey, audioController.adhanUrl[index]);
+                      controllerTwo.setPrayerAdhan(
+                          prayerKey, audioController.adhanUrl[index]);
                       Get.back();
                     },
                   ),
@@ -1677,7 +1766,8 @@ class Transparent_drawer_settings_two extends StatelessWidget {
       'en': {
         'about_title': 'About Muadhin',
         'about_subtitle': 'App details, version, and info',
-        'app_desc': 'An elegant, transparent, and completely ad-free Islamic companion app designed to bring tranquility to your home with precise prayer times, high-quality Adhan sounds, and stunning dynamic wallpapers.',
+        'app_desc':
+            'An elegant, transparent, and completely ad-free Islamic companion app designed to bring tranquility to your home with precise prayer times, high-quality Adhan sounds, and stunning dynamic wallpapers.',
         'f1': 'Precision offline calculations',
         'f2': 'Premium Adhan audio selectors',
         'f3': 'Dynamic background wallpapers',
@@ -1687,7 +1777,8 @@ class Transparent_drawer_settings_two extends StatelessWidget {
       'nl': {
         'about_title': 'Over Muadhin',
         'about_subtitle': 'App-details, versie en info',
-        'app_desc': 'Een elegante, transparante en volledig advertentievrije islamitische metgezel-app ontworpen om rust in uw huis te brengen met nauwkeurige gebedstijden, hoogwaardige Adhan-geluiden en prachtige dynamische achtergronden.',
+        'app_desc':
+            'Een elegante, transparante en volledig advertentievrije islamitische metgezel-app ontworpen om rust in uw huis te brengen met nauwkeurige gebedstijden, hoogwaardige Adhan-geluiden en prachtige dynamische achtergronden.',
         'f1': 'Nauwkeurige offline berekeningen',
         'f2': 'Premium Adhan-audioselectoren',
         'f3': 'Dynamische achtergrondachtergronden',
@@ -1697,7 +1788,8 @@ class Transparent_drawer_settings_two extends StatelessWidget {
       'fr': {
         'about_title': 'À propos de Muadhin',
         'about_subtitle': 'Détails de l\'application, version et infos',
-        'app_desc': 'Une application compagnon islamique élégante, transparente et complètement sans publicité, conçue pour apporter la tranquillité dans votre maison avec des horaires de prière précis, des sons d\'Adhan de haute qualité et de superbes fonds d\'écran dynamiques.',
+        'app_desc':
+            'Une application compagnon islamique élégante, transparente et complètement sans publicité, conçue pour apporter la tranquillité dans votre maison avec des horaires de prière précis, des sons d\'Adhan de haute qualité et de superbes fonds d\'écran dynamiques.',
         'f1': 'Calculs hors ligne de précision',
         'f2': 'Sélecteurs audio d\'Adhan premium',
         'f3': 'Fonds d\'écran dynamiques',
@@ -1707,7 +1799,8 @@ class Transparent_drawer_settings_two extends StatelessWidget {
       'de': {
         'about_title': 'Über Muadhin',
         'about_subtitle': 'App-Details, Version und Infos',
-        'app_desc': 'Eine elegante, transparente und völlig werbefreie islamische Begleiter-App, die entwickelt wurde, um mit präzisen Gebetszeiten, hochwertigen Adhan-Klängen und atemberaubenden dynamischen Hintergrundbildern Ruhe in Ihr Zuhause zu bringen.',
+        'app_desc':
+            'Eine elegante, transparente und völlig werbefreie islamische Begleiter-App, die entwickelt wurde, um mit präzisen Gebetszeiten, hochwertigen Adhan-Klängen und atemberaubenden dynamischen Hintergrundbildern Ruhe in Ihr Zuhause zu bringen.',
         'f1': 'Präzise Offline-Berechnungen',
         'f2': 'Premium-Adhan-Audioauswahl',
         'f3': 'Dynamische Hintergrundbilder',
@@ -1717,7 +1810,8 @@ class Transparent_drawer_settings_two extends StatelessWidget {
       'ar': {
         'about_title': 'حول المؤذن',
         'about_subtitle': 'تفاصيل التطبيق، الإصدار والمعلومات',
-        'app_desc': 'تطبيق إسلامي أنيق، شفاف وخالٍ تمامًا من الإعلانات مصمم لإضفاء السكينة على منزلك مع مواقيت صلاة دقيقة، وأصوات أذان عالية الجودة، وخلفيات ديناميكية مذهلة.',
+        'app_desc':
+            'تطبيق إسلامي أنيق، شفاف وخالٍ تمامًا من الإعلانات مصمم لإضفاء السكينة على منزلك مع مواقيت صلاة دقيقة، وأصوات أذان عالية الجودة، وخلفيات ديناميكية مذهلة.',
         'f1': 'حسابات دقيقة بدون اتصال بالإنترنت',
         'f2': 'محددات صوت أذان ممتازة',
         'f3': 'خلفيات شاشة ديناميكية',
@@ -1727,7 +1821,8 @@ class Transparent_drawer_settings_two extends StatelessWidget {
       'tr': {
         'about_title': 'Muadhin Hakkında',
         'about_subtitle': 'Uygulama ayrıntıları, sürüm ve bilgiler',
-        'app_desc': 'Hassas namaz vakitleri, yüksek kaliteli Ezan sesleri ve çarpıcı dinamik duvar kağıtları ile evinize huzur getirmek için tasarlanmış şık, şeffaf ve tamamen reklamsız bir İslami yardımcı uygulama.',
+        'app_desc':
+            'Hassas namaz vakitleri, yüksek kaliteli Ezan sesleri ve çarpıcı dinamik duvar kağıtları ile evinize huzur getirmek için tasarlanmış şık, şeffaf ve tamamen reklamsız bir İslami yardımcı uygulama.',
         'f1': 'Hassas çevrimdışı hesapmalar',
         'f2': 'Premium Ezan ses seçicileri',
         'f3': 'Dinamik arka plan duvar kağıtları',
@@ -1737,7 +1832,8 @@ class Transparent_drawer_settings_two extends StatelessWidget {
       'bn': {
         'about_title': 'মুয়াজ্জিন সম্পর্কে',
         'about_subtitle': 'অ্যাপের বিবরণ, সংস্করণ এবং তথ্য',
-        'app_desc': 'একটি মার্জিত, স্বচ্ছ এবং সম্পূর্ণ বিজ্ঞাপন-মুক্ত ইসলামিক সহযোগী অ্যাপ যা আপনার ঘরে প্রশান্তি আনার জন্য তৈরি করা হয়েছে নিখুঁত নামাজের সময়, উচ্চ মানের আযানের শব্দ এবং চমৎকার গতিশীল ওয়ালপেপারের মাধ্যমে।',
+        'app_desc':
+            'একটি মার্জিত, স্বচ্ছ এবং সম্পূর্ণ বিজ্ঞাপন-মুক্ত ইসলামিক সহযোগী অ্যাপ যা আপনার ঘরে প্রশান্তি আনার জন্য তৈরি করা হয়েছে নিখুঁত নামাজের সময়, উচ্চ মানের আযানের শব্দ এবং চমৎকার গতিশীল ওয়ালপেপারের মাধ্যমে।',
         'f1': 'নিখুঁত অফলাইন গণনা',
         'f2': 'প্রিমিয়াম আযান অডিও নির্বাচক',
         'f3': 'গতিশীল ব্যাকগ্রাউন্ড ওয়ালপেপার',
@@ -1812,12 +1908,27 @@ class Transparent_drawer_settings_two extends StatelessWidget {
               SizedBox(
                 width: .6.w,
               ),
-              Text(
-                "${controller.muajjinName[surahIndex]}",
-                style: TextStyle(
+              // Expanded(
+              //   child: ScrollingText(
+              //     text: "${controller.muajjinName[surahIndex]}",
+              //     textStyle: TextStyle(
+              //         fontSize: 2.w,
+              //         fontWeight: FontWeight.w100,
+              //         color: Colors.white),
+              //   ),
+              // ),
+              Expanded(
+                child: Text(
+                  controller.muajjinName[surahIndex],
+                  style: TextStyle(
                     fontSize: 2.w,
                     fontWeight: FontWeight.w100,
-                    color: Colors.white),
+                    color: Colors.white,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
+                ),
               ),
             ],
           ),
@@ -1919,5 +2030,3 @@ class Transparent_drawer_settings_two extends StatelessWidget {
     });
   }
 }
-
-
