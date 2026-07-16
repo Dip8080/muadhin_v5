@@ -80,6 +80,27 @@ void _startClock() {
 //   final formatter = DateFormat('HH:mm');
 //   return formatter.format(tzTime);
 // }
+// updated
+// String getCurrentTimeInSelectedTimeZone() {
+//   final location = tz.getLocation(selectedTimeZone.value);
+//   final tzTime = tz.TZDateTime.now(location);
+//   final formatter = DateFormat('HH:mm');
+//   return formatter.format(tzTime);
+// }
+// updated
+// String getCurrentTimeInSelectedTimeZone() {
+//   final location = tz.getLocation(selectedTimeZone.value);
+//   final tzTime = tz.TZDateTime.now(location);
+//   final formatter = DateFormat('HH:mm');
+//   return formatter.format(tzTime);
+// }
+// updated
+// String getCurrentTimeInSelectedTimeZone() {
+//   final location = tz.getLocation(selectedTimeZone.value);
+//   final tzTime = tz.TZDateTime.now(location);
+//   final formatter = DateFormat('HH:mm');
+//   return formatter.format(tzTime);
+// }
 
 
 
